@@ -1,0 +1,24 @@
+.item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width:calc( ( 100% - 24px ) / 2 );
+    position: relative;
+}
+
+.image {
+    display: flex;
+    justify-content: center;
+}
+
+.badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    background-color: #4c4cff;
+    border-radius: 50%;
+}
