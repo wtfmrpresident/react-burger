@@ -1,28 +1,17 @@
 import React from "react";
 import appHeaderStyles from "./app-header.module.css";
-import {BurgerIcon, ListIcon, ProfileIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import IMenuItem from "../../interfaces/IMenuItem";
 
-function getIcon(iconName: string) {
-    switch (iconName) {
-        case 'burger':
-            return <BurgerIcon type="secondary" />;
-        case 'list':
-            return <ListIcon type="secondary" />;
-        case 'profile':
-            return <ProfileIcon type="secondary" />;
-        default:
-            return null;
-    }
-}
-
-function MenuItem(props: item<object>, key: React.Key | null | undefined) {
+function MenuItem(props: {item: IMenuItem, isActive: boolean}) {
     return (
-        <li key={key}>
-            <a className={`${appHeaderStyles.menuText} text text_type_main-default`}>
-                {getIcon(props.item.iconName)}
-                {props.item.text}
-            </a>
-        </li>
+        <a
+            className={`${appHeaderStyles.menuText} text text_type_main-default${props.isActive && ' ' + appHeaderStyles.active}`}
+            href="/#"
+            onClick={(e) => e.preventDefault()}
+        >
+            {props.item.icon}
+            {props.item.text}
+        </a>
     )
 }
 

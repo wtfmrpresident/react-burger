@@ -48,6 +48,11 @@
 
 .menu li a {
     color: #8585ad;
+    text-decoration: none;
+}
+
+.menu li a.active {
+    color: #fff;
 }
 
 .menu li a:hover {

@@ -7,18 +7,18 @@ function AppHeader() {
     const leftMenu = [
         {
             text: 'Конструктор',
-            iconName: 'burger'
+            icon: <BurgerIcon type="secondary" />
         },
         {
             text: 'Лента заказов',
-            iconName: 'list'
+            icon: <ListIcon type="secondary" />
         },
     ];
 
     const rightMenu = [
         {
             text: 'Личный кабинет',
-            iconName: 'profile'
+            icon: <ProfileIcon type="secondary" />
         },
     ];
 

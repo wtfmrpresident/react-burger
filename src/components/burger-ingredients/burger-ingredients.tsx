@@ -1,67 +1,75 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import React, {useState} from "react";
 import Tabs from "./tabs";
 import IngredientsList from "./ingredients-list";
+import IBurgerItem from "../../interfaces/IBurgerItem";
+import IAddToCart from "../../interfaces/IAddToCart";
+import ITitles from "../../interfaces/ITitles";
+import ingredientsStyle from "./ingredients-list.module.css";
 
-const itemPropType = PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    proteins: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    carbohydrates: PropTypes.number.isRequired,
-    calories: PropTypes.number.isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    image_mobile: PropTypes.string.isRequired,
-    image_large: PropTypes.string.isRequired,
-    __v: PropTypes.number.isRequired
-})
+interface IProps {
+    items: IBurgerItem[],
+    cart: IBurgerItem[],
+    addToCartHandler: IAddToCart
+}
 
-class BurgerIngredients extends React.Component<any, any> {
-    static propTypes = {
-        items: PropTypes.arrayOf(itemPropType),
-        addToCartHandler: PropTypes.func.isRequired,
-        cart: PropTypes.arrayOf(itemPropType)
+const BurgerIngredients = (props: IProps) => {
+    const bunRef = React.useRef<HTMLHeadingElement>(null)
+    const sauceRef = React.useRef<HTMLHeadingElement>(null)
+    const mainRef = React.useRef<HTMLHeadingElement>(null)
+
+    const [selectedTab, setSelectedTab] = useState("bun");
+
+    const handleChangeTab = (value: string) => {
+        const refHtmlElement = getRefHtmlElement(value)
+        if (refHtmlElement.current) {
+            refHtmlElement.current.scrollIntoView({behavior: "smooth"})
+        }
+
+        setSelectedTab(value)
     }
 
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            selectedTab: 'bun',
+    const getRefHtmlElement = (value: string): React.RefObject<HTMLHeadingElement> => {
+        switch (value) {
+            case 'bun':
+            default:
+                return bunRef
+            case 'sauce':
+                return sauceRef
+            case 'main':
+                return mainRef
         }
     }
 
-    setSelectedTab = (value: string) => {
-        this.setState({selectedTab: value})
-    }
-
-    render() {
-        const typeToTitleMap = {
-            bun: 'Булочки',
+    const titles = (): ITitles => {
+        return {
+            bun:  'Булочки',
             sauce: 'Соусы',
             main: 'Начинки'
         }
-
-        const items = this.props.items ? this.props.items.filter((item: object) => item.type === this.state.selectedTab) : []
-
-        return (
-            <>
-                <div>
-                    <h1 className="mt-10 mb-5 text text_type_main-large">Соберите Бургер</h1>
-                    <Tabs selectedTab={this.state.selectedTab} setSelectedTab={this.setSelectedTab} />
-                    <IngredientsList
-                        items={items}
-                        cart={this.props.cart}
-                        type={this.state.selectedTab}
-                        title={typeToTitleMap[this.state.selectedTab]}
-                        addToCartHandler={this.props.addToCartHandler}
-                    />
-                </div>
-            </>
-        )
     }
+
+    return (
+        <>
+            <div>
+                <h1 className="mt-10 mb-5 text text_type_main-large">Соберите Бургер</h1>
+                <Tabs selectedTab={selectedTab} setSelectedTab={handleChangeTab} />
+
+                <div className={`${ingredientsStyle.scroll} pr-4`}>
+                    {Object.entries(titles()).map((title: [string, string]) => {
+                        const type = title[0]
+                        const items = props.items ? props.items.filter((item: IBurgerItem) => item.type === type) : []
+
+                        return (
+                            <div key={type}>
+                                <h2 className="text text_type_main-medium" ref={getRefHtmlElement(type)}>{title[1]}</h2>
+                                <IngredientsList items={items} cart={props.cart} addToCartHandler={props.addToCartHandler} />
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+        </>
+    )
 }
 
 export default BurgerIngredients;

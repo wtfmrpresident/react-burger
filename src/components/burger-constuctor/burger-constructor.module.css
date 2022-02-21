@@ -1,11 +1,5 @@
-.ingredients {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
 .scroll {
-    height: 60vh;
+    max-height: 580px;
     overflow-y: scroll;
 }
 
