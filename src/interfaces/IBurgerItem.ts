@@ -1,4 +1,4 @@
-interface IBurgerItem {
+export default interface IBurgerItem {
     _id: string,
     name: string,
     type: string,
@@ -13,5 +13,3 @@ interface IBurgerItem {
     image_large: string,
     __v: number
 }
-
-export default IBurgerItem

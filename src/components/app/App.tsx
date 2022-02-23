@@ -1,43 +1,64 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constuctor/burger-constructor";
 import IBurgerItem from "../../interfaces/IBurgerItem"
 import appStyles from  './app.module.css';
-import fetchedData from "../../utils/data.json"
+import IAppState from "../../interfaces/IAppState";
 
-interface IProps {}
+const API_URL = 'https://norma.nomoreparties.space/api/ingredients'
 
-interface IState {
-    items: IBurgerItem[],
-    cart: IBurgerItem[],
-}
+function App() {
+    const [state, setState] = useState<IAppState>({
+        items: [],
+        cart: [],
+        isLoaded: false,
+        hasErrors: false
+    })
 
-class App extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
+    useEffect(() => {
+        getData()
+    }, [])
 
-        this.state = {
-            items: [],
-            cart: [],
-        }
-    }
-
-    componentDidMount() {
-        this.getData()
-    }
-
-    getData() {
-        const data: IBurgerItem[] = fetchedData
-        this.setState((prevState: IState) => ({
+    function getData() {
+        setState((prevState) => ({
             ...prevState,
-            items: data
+            isLoaded: false,
         }))
+
+        fetch(API_URL)
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    setState((prevState) => ({
+                        ...prevState,
+                        isLoaded: true,
+                        items: result.data
+                    }))
+                },
+                () => {
+                    setState((prevState) => ({
+                        ...prevState,
+                        isLoaded: true,
+                        hasErrors: true
+                    }))
+                }
+            )
     }
 
-    addToCart = (item: IBurgerItem) => {
+    useEffect(() => {
+        crutchilyFillCart()
+    }, [state.items])
+
+    function crutchilyFillCart() {
+        state.items.forEach((item) => {
+            addToCart(item)
+        })
+    }
+
+    function addToCart(item: IBurgerItem): void {
         if (item.type === 'bun') {
-            const cart = this.state.cart
+            const cart = state.cart
             // Не даем добавлять несколько булочек, вместо этого меняем одну на другую
             if (cart) {
                 let currentTopBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'top')
@@ -50,14 +71,14 @@ class App extends React.Component<IProps, IState> {
                     cart.splice(currentBottomBunIndex, 1)
                 }
 
-                this.setState((prevState: IState) => ({
+                setState((prevState: IAppState) => ({
                     ...prevState,
                     cart: cart
                 }))
             }
         }
 
-        const cart: IBurgerItem[] = this.state.cart
+        const cart: IBurgerItem[] | null = state.cart
 
         if (cart) {
             if (cart.find((cartItem) => cartItem._id === item._id)) {
@@ -81,20 +102,20 @@ class App extends React.Component<IProps, IState> {
             cart.push(item)
         }
 
-        this.setState((prevState: IState) => ({
+        setState((prevState: IAppState) => ({
             ...prevState,
             cart: cart
         }))
     }
 
-    removeFromCart = (id: string) => {
-        const cart = this.state.cart
+    function removeFromCart(id: string) {
+        const cart = state.cart
         if (cart) {
             let removeItemIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem._id === id)
             if (removeItemIndex !== -1) {
                 cart.splice(removeItemIndex, 1)
 
-                this.setState((prevState: IState) => ({
+                setState((prevState: IAppState) => ({
                     ...prevState,
                     cart: cart
                 }))
@@ -102,23 +123,23 @@ class App extends React.Component<IProps, IState> {
         }
     }
 
-    render() {
-        return (
-            <>
-                <AppHeader />
-                <div className={appStyles.container}>
-                    <main className={appStyles.main}>
-                        <section className={`${appStyles.section} ${appStyles.limitedHeight} mb-10 mr-10`}>
-                            <BurgerIngredients items={this.state.items} cart={this.state.cart} addToCartHandler={this.addToCart} />
-                        </section>
-                        <section className={`${appStyles.section} pt-25`}>
-                            <BurgerConstructor items={this.state.cart} removeFromCart={this.removeFromCart} />
-                        </section>
-                    </main>
-                </div>
-            </>
-        );
-    }
+    return (
+        <>
+            <AppHeader />
+            <div className={appStyles.container}>
+                <main className={appStyles.main}>
+                    <section className={`${appStyles.section} ${appStyles.limitedHeight} mb-10 mr-10`}>
+                        {state.isLoaded && !state.hasErrors && <BurgerIngredients items={state.items} cart={state.cart} addToCartHandler={addToCart} />}
+                        {!state.isLoaded && !state.hasErrors && <p className="">Рагружаем контейнер с ингридиентами...</p> }
+                        {!state.isLoaded && state.hasErrors && <p className="">При разгрузке контейнера с ингридиентами произошла нелепоя ошибка. Исправляем...</p> }
+                    </section>
+                    <section className={`${appStyles.section} pt-25`}>
+                        <BurgerConstructor items={state.cart} removeFromCart={removeFromCart} />
+                    </section>
+                </main>
+            </div>
+        </>
+    );
 }
 
 export default App;
