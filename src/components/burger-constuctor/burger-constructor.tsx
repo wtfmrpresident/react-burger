@@ -4,9 +4,9 @@ import {Button, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-comp
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import IRemoveFromCart from "../../interfaces/IRemoveFromCart";
 import burgerConstructorStyles from "./burger-constructor.module.css";
-import OrderDetails from "../../modal/order-details";
-import Modal from "../../modal/modal";
-import useModal from "../../modal/use-modal";
+import OrderDetails from "../order-details/order-details";
+import Modal from "../modal/modal";
+import useModal from "../modal/use-modal";
 
 function BurgerConstructor(props: {items: IBurgerItem[], removeFromCart: IRemoveFromCart}) {
     const { isOpen, toggle } = useModal();
@@ -24,17 +24,20 @@ function BurgerConstructor(props: {items: IBurgerItem[], removeFromCart: IRemove
 
     const items = props.items && props.items.filter((item) => item.type !== 'bun')
 
+    items.forEach((item) => {
+        cartTotal += item.price
+    })
+
     return (
         <>
             <Modal isOpen={isOpen} hide={toggle}>
-                <OrderDetails orderId={"0345636"} />
+                <OrderDetails orderId="0345636" />
             </Modal>
             <div className="mt-10">
                 {bunTop && <BurgerConstructorItem item={bunTop} key={'top_' + bunTop._id} removeFromCart={props.removeFromCart} isDrugEnabled={false} />}
 
                 <div className={`${burgerConstructorStyles.scroll}`}>
                     {items ? items.map((item) => {
-                        cartTotal += item.price
                         return <BurgerConstructorItem removeFromCart={props.removeFromCart} item={item} key={item._id} isDrugEnabled={true} />
                     }) : null}
                 </div>

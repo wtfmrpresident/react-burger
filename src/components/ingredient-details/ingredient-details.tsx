@@ -1,5 +1,5 @@
 import React from "react";
-import IBurgerItem from "../interfaces/IBurgerItem";
+import IBurgerItem from "../../interfaces/IBurgerItem";
 import ingredientDetailsStyles from "./ingredient-details.module.css"
 
 export default function IngredientDetails(props: {item: IBurgerItem}) {
@@ -9,7 +9,7 @@ export default function IngredientDetails(props: {item: IBurgerItem}) {
                 <img src={props.item.image_large} alt={props.item.name} />
             </div>
 
-            <p className="mt-4 mb-8 text text_type_main-medium" style={{textAlign: "center"}}>
+            <p className={`${ingredientDetailsStyles.textCenter} mt-4 mb-8 text text_type_main-medium`}>
                 {props.item.name}
             </p>
 

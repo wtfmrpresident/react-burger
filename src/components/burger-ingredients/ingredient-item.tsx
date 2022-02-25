@@ -3,13 +3,13 @@ import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientItemStyle from './ingredient-item.module.css';
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import IAddToCart from "../../interfaces/IAddToCart";
-import useModal from "../../modal/use-modal";
-import Modal from "../../modal/modal";
-import IngredientDetails from "../../modal/ingredient-details";
+import useModal from "../modal/use-modal";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
 function IngredientItem(props: { item: IBurgerItem, cart: IBurgerItem[], addToCartHandler: IAddToCart }) {
     function hasCartItem(item: IBurgerItem, cart: IBurgerItem[]): boolean {
-        return typeof cart.find((cartItem) => cartItem._id === item._id) !== "undefined"
+        return cart.some((cartItem) => cartItem._id === item._id)
     }
 
     const hasCartThisItem = hasCartItem(props.item, props.cart)

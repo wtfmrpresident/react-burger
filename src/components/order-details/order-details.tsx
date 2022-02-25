@@ -12,17 +12,17 @@ export default function orderDetails(props: IProps) {
                 {props.orderId}
             </p>
 
-            <p className="mb-15 text text_type_main-default" style={{textAlign: "center"}}>идентификатор заказа</p>
+            <p className={`${orderDetailsStyles.textCenter} mb-15 text text_type_main-default`}>идентификатор заказа</p>
 
-            <div className="mb-15" style={{display: "flex", justifyContent: "center"}}>
+            <div className={`${orderDetailsStyles.acceptedContainer} mb-15`}>
                 <div className={orderDetailsStyles.accepted}>
                     <CheckMarkIcon type="primary" />
                 </div>
             </div>
 
-            <p className="mb-2 text text_type_main-small" style={{textAlign: "center"}}>Ваш заказ начали готовить</p>
+            <p className={`${orderDetailsStyles.textCenter} mb-2 text text_type_main-small`}>Ваш заказ начали готовить</p>
 
-            <p className="mb-30 text text_type_main-small" style={{textAlign: "center"}}>Дождитесь готовности на орбитальной станции</p>
+            <p className={`${orderDetailsStyles.textCenter} mb-30 text text_type_main-small`}>Дождитесь готовности на орбитальной станции</p>
         </>
     )
 }

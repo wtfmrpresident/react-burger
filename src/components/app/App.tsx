@@ -21,10 +21,10 @@ function App() {
     }, [])
 
     function getData() {
-        setState((prevState) => ({
-            ...prevState,
+        setState({
+            ...state,
             isLoaded: false,
-        }))
+        })
 
         fetch(API_URL)
             .then((res) => res.json())
@@ -46,61 +46,46 @@ function App() {
             )
     }
 
-    useEffect(() => {
-        crutchilyFillCart()
-    }, [state.items])
+    const addToCart = (items: IBurgerItem[]): void => {
+        const cart = [...state.cart]
 
-    function crutchilyFillCart() {
-        state.items.forEach((item) => {
-            addToCart(item)
-        })
-    }
+        items.map((item) => {
+            if (item.type === 'bun') {
+                // Не даем добавлять несколько булочек, вместо этого меняем одну на другую
+                if (cart) {
+                    let currentTopBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'top')
+                    if (currentTopBunIndex !== -1) {
+                        cart.splice(currentTopBunIndex, 1)
+                    }
 
-    function addToCart(item: IBurgerItem): void {
-        if (item.type === 'bun') {
-            const cart = state.cart
-            // Не даем добавлять несколько булочек, вместо этого меняем одну на другую
+                    let currentBottomBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'bottom')
+                    if (currentBottomBunIndex !== -1) {
+                        cart.splice(currentBottomBunIndex, 1)
+                    }
+                }
+            }
+
             if (cart) {
-                let currentTopBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'top')
-                if (currentTopBunIndex !== -1) {
-                    cart.splice(currentTopBunIndex, 1)
+                if (cart.find((cartItem) => cartItem._id === item._id)) {
+                    return
                 }
-
-                let currentBottomBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'bottom')
-                if (currentBottomBunIndex !== -1) {
-                    cart.splice(currentBottomBunIndex, 1)
-                }
-
-                setState((prevState: IAppState) => ({
-                    ...prevState,
-                    cart: cart
-                }))
             }
-        }
+            if (item.type === 'bun') {
+                let bunTop = Object.assign({}, item)
+                bunTop.name += ' (верх)'
+                bunTop.subtype = 'top'
+                cart.push(bunTop)
 
-        const cart: IBurgerItem[] | null = state.cart
+                let bunBottom = Object.assign({}, item)
+                bunBottom.name += ' (низ)'
+                bunBottom.price = 0
+                bunBottom.subtype = 'bottom'
 
-        if (cart) {
-            if (cart.find((cartItem) => cartItem._id === item._id)) {
-                return
+                cart.push(bunBottom)
+            } else {
+                cart.push(item)
             }
-        }
-
-        if (item.type === 'bun') {
-            let bunTop = Object.assign({}, item)
-            bunTop.name += ' (верх)'
-            bunTop.subtype = 'top'
-            cart.push(bunTop)
-
-            let bunBottom = Object.assign({}, item)
-            bunBottom.name += ' (низ)'
-            bunBottom.price = 0
-            bunBottom.subtype = 'bottom'
-
-            cart.push(bunBottom)
-        } else {
-            cart.push(item)
-        }
+        })
 
         setState((prevState: IAppState) => ({
             ...prevState,
@@ -108,7 +93,7 @@ function App() {
         }))
     }
 
-    function removeFromCart(id: string) {
+    const removeFromCart = (id: string) => {
         const cart = state.cart
         if (cart) {
             let removeItemIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem._id === id)
@@ -122,6 +107,12 @@ function App() {
             }
         }
     }
+
+    useEffect(() => {
+        if (state.isLoaded) {
+            addToCart(state.items)
+        }
+    }, [state.isLoaded, state.items])
 
     return (
         <>
