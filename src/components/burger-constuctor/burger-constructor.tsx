@@ -11,18 +11,11 @@ import useModal from "../modal/use-modal";
 function BurgerConstructor(props: {items: IBurgerItem[], removeFromCart: IRemoveFromCart}) {
     const { isOpen, toggle } = useModal();
 
-    let bunTop: IBurgerItem | undefined,
-        bunBottom: IBurgerItem | undefined,
-        cartTotal: number = 0
-
-    if (props.items) {
-        bunTop = props.items.find((cartItem: IBurgerItem) => cartItem.subtype === 'top')
-        bunBottom = props.items.find((cartItem: IBurgerItem) => cartItem.subtype === 'bottom')
-
-        cartTotal += (bunTop ? bunTop.price : 0) + (bunBottom ? bunBottom.price : 0)
-    }
-
+    const bunTop = props.items ? props.items.find((cartItem: IBurgerItem) => cartItem.subtype === 'top') : null
+    const bunBottom = props.items ? props.items.find((cartItem: IBurgerItem) => cartItem.subtype === 'bottom') : null
     const items = props.items && props.items.filter((item) => item.type !== 'bun')
+
+    let cartTotal: number = (bunTop ? bunTop.price : 0) + (bunBottom ? bunBottom.price : 0)
 
     items.forEach((item) => {
         cartTotal += item.price

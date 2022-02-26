@@ -12,7 +12,7 @@ export default function orderDetails(props: IProps) {
                 {props.orderId}
             </p>
 
-            <p className={`${orderDetailsStyles.textCenter} mb-15 text text_type_main-default`}>идентификатор заказа</p>
+            <p className={`${orderDetailsStyles.text__center} mb-15 text text_type_main-default`}>идентификатор заказа</p>
 
             <div className={`${orderDetailsStyles.acceptedContainer} mb-15`}>
                 <div className={orderDetailsStyles.accepted}>
@@ -20,9 +20,9 @@ export default function orderDetails(props: IProps) {
                 </div>
             </div>
 
-            <p className={`${orderDetailsStyles.textCenter} mb-2 text text_type_main-small`}>Ваш заказ начали готовить</p>
+            <p className={`${orderDetailsStyles.text__center} mb-2 text text_type_main-small`}>Ваш заказ начали готовить</p>
 
-            <p className={`${orderDetailsStyles.textCenter} mb-30 text text_type_main-small`}>Дождитесь готовности на орбитальной станции</p>
+            <p className={`${orderDetailsStyles.text__center} mb-30 text text_type_main-small`}>Дождитесь готовности на орбитальной станции</p>
         </>
     )
 }

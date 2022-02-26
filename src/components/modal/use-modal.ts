@@ -8,6 +8,7 @@ function useModal() {
             e.preventDefault()
             toggle()
         }
+        // eslint-disable-next-line
     }, [isOpen])
 
     useEffect(() => {

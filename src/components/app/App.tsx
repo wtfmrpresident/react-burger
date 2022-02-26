@@ -18,6 +18,7 @@ function App() {
 
     useEffect(() => {
         getData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     function getData() {
@@ -30,18 +31,18 @@ function App() {
             .then((res) => res.json())
             .then(
                 (result) => {
-                    setState((prevState) => ({
-                        ...prevState,
+                    setState({
+                        ...state,
                         isLoaded: true,
                         items: result.data
-                    }))
+                    })
                 },
                 () => {
-                    setState((prevState) => ({
-                        ...prevState,
+                    setState({
+                        ...state,
                         isLoaded: true,
                         hasErrors: true
-                    }))
+                    })
                 }
             )
     }
@@ -49,16 +50,16 @@ function App() {
     const addToCart = (items: IBurgerItem[]): void => {
         const cart = [...state.cart]
 
-        items.map((item) => {
+        items.forEach((item) => {
             if (item.type === 'bun') {
                 // Не даем добавлять несколько булочек, вместо этого меняем одну на другую
                 if (cart) {
-                    let currentTopBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'top')
+                    const currentTopBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'top')
                     if (currentTopBunIndex !== -1) {
                         cart.splice(currentTopBunIndex, 1)
                     }
 
-                    let currentBottomBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'bottom')
+                    const currentBottomBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'bottom')
                     if (currentBottomBunIndex !== -1) {
                         cart.splice(currentBottomBunIndex, 1)
                     }
@@ -71,39 +72,33 @@ function App() {
                 }
             }
             if (item.type === 'bun') {
-                let bunTop = Object.assign({}, item)
-                bunTop.name += ' (верх)'
-                bunTop.subtype = 'top'
+                const bunTop: IBurgerItem = {...item, name: item.name + ' (верх)', subtype: 'top'}
+                const bunBottom: IBurgerItem = {...item, name: item.name + ' (низ)', price: 0, subtype: 'bottom'}
+
                 cart.push(bunTop)
-
-                let bunBottom = Object.assign({}, item)
-                bunBottom.name += ' (низ)'
-                bunBottom.price = 0
-                bunBottom.subtype = 'bottom'
-
                 cart.push(bunBottom)
             } else {
                 cart.push(item)
             }
         })
 
-        setState((prevState: IAppState) => ({
-            ...prevState,
-            cart: cart
-        }))
+        setState({
+            ...state,
+            cart
+        })
     }
 
     const removeFromCart = (id: string) => {
-        const cart = state.cart
+        const cart = [...state.cart]
         if (cart) {
             let removeItemIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem._id === id)
             if (removeItemIndex !== -1) {
                 cart.splice(removeItemIndex, 1)
 
-                setState((prevState: IAppState) => ({
-                    ...prevState,
-                    cart: cart
-                }))
+                setState({
+                    ...state,
+                    cart
+                })
             }
         }
     }
@@ -112,6 +107,7 @@ function App() {
         if (state.isLoaded) {
             addToCart(state.items)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.isLoaded, state.items])
 
     return (
@@ -120,9 +116,9 @@ function App() {
             <div className={appStyles.container}>
                 <main className={appStyles.main}>
                     <section className={`${appStyles.section} ${appStyles.limitedHeight} mb-10 mr-10`}>
-                        {state.isLoaded && !state.hasErrors && <BurgerIngredients items={state.items} cart={state.cart} addToCartHandler={addToCart} />}
+                        {state.isLoaded && !state.hasErrors && <BurgerIngredients items={state.items} cart={state.cart} />}
                         {!state.isLoaded && !state.hasErrors && <p className="">Рагружаем контейнер с ингридиентами...</p> }
-                        {!state.isLoaded && state.hasErrors && <p className="">При разгрузке контейнера с ингридиентами произошла нелепая ошибка. Исправляем...</p> }
+                        {state.isLoaded && state.hasErrors && <p className="">При разгрузке контейнера с ингридиентами произошла нелепая ошибка. Исправляем...</p> }
                     </section>
                     <section className={`${appStyles.section} pt-25`}>
                         <BurgerConstructor items={state.cart} removeFromCart={removeFromCart} />

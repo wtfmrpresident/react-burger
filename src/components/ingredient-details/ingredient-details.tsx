@@ -9,7 +9,7 @@ export default function IngredientDetails(props: {item: IBurgerItem}) {
                 <img src={props.item.image_large} alt={props.item.name} />
             </div>
 
-            <p className={`${ingredientDetailsStyles.textCenter} mt-4 mb-8 text text_type_main-medium`}>
+            <p className={`${ingredientDetailsStyles.text__center} mt-4 mb-8 text text_type_main-medium`}>
                 {props.item.name}
             </p>
 
