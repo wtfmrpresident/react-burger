@@ -1,0 +1,24 @@
+.imgContainer {
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}
+
+.imgContainer > img {
+    width: 480px;
+    height: 240px;
+}
+
+.properties {
+    display: flex;
+    justify-content: space-between;
+}
+
+.propertiesColumn {
+    text-align: center;
+}
+
+.text__center {
+    text-align: center;
+}

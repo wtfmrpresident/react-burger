@@ -1,124 +1,132 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constuctor/burger-constructor";
 import IBurgerItem from "../../interfaces/IBurgerItem"
 import appStyles from  './app.module.css';
-import fetchedData from "../../utils/data.json"
+import IAppState from "../../interfaces/IAppState";
 
-interface IProps {}
+const API_URL = 'https://norma.nomoreparties.space/api/ingredients'
 
-interface IState {
-    items: IBurgerItem[],
-    cart: IBurgerItem[],
-}
+function App() {
+    const [state, setState] = useState<IAppState>({
+        items: [],
+        cart: [],
+        isLoaded: false,
+        hasErrors: false
+    })
 
-class App extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
+    useEffect(() => {
+        getData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
-        this.state = {
-            items: [],
-            cart: [],
-        }
+    function getData() {
+        setState({
+            ...state,
+            isLoaded: false,
+        })
+
+        fetch(API_URL)
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    setState({
+                        ...state,
+                        isLoaded: true,
+                        items: result.data
+                    })
+                },
+                () => {
+                    setState({
+                        ...state,
+                        isLoaded: true,
+                        hasErrors: true
+                    })
+                }
+            )
     }
 
-    componentDidMount() {
-        this.getData()
-    }
+    const addToCart = (items: IBurgerItem[]): void => {
+        const cart = [...state.cart]
 
-    getData() {
-        const data: IBurgerItem[] = fetchedData
-        this.setState((prevState: IState) => ({
-            ...prevState,
-            items: data
-        }))
-    }
+        items.forEach((item) => {
+            if (item.type === 'bun') {
+                // Не даем добавлять несколько булочек, вместо этого меняем одну на другую
+                if (cart) {
+                    const currentTopBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'top')
+                    if (currentTopBunIndex !== -1) {
+                        cart.splice(currentTopBunIndex, 1)
+                    }
 
-    addToCart = (item: IBurgerItem) => {
-        if (item.type === 'bun') {
-            const cart = this.state.cart
-            // Не даем добавлять несколько булочек, вместо этого меняем одну на другую
+                    const currentBottomBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'bottom')
+                    if (currentBottomBunIndex !== -1) {
+                        cart.splice(currentBottomBunIndex, 1)
+                    }
+                }
+            }
+
             if (cart) {
-                let currentTopBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'top')
-                if (currentTopBunIndex !== -1) {
-                    cart.splice(currentTopBunIndex, 1)
+                if (cart.find((cartItem) => cartItem._id === item._id)) {
+                    return
                 }
-
-                let currentBottomBunIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem.subtype === 'bottom')
-                if (currentBottomBunIndex !== -1) {
-                    cart.splice(currentBottomBunIndex, 1)
-                }
-
-                this.setState((prevState: IState) => ({
-                    ...prevState,
-                    cart: cart
-                }))
             }
-        }
+            if (item.type === 'bun') {
+                const bunTop: IBurgerItem = {...item, name: item.name + ' (верх)', subtype: 'top'}
+                const bunBottom: IBurgerItem = {...item, name: item.name + ' (низ)', price: 0, subtype: 'bottom'}
 
-        const cart: IBurgerItem[] = this.state.cart
-
-        if (cart) {
-            if (cart.find((cartItem) => cartItem._id === item._id)) {
-                return
+                cart.push(bunTop)
+                cart.push(bunBottom)
+            } else {
+                cart.push(item)
             }
-        }
+        })
 
-        if (item.type === 'bun') {
-            let bunTop = Object.assign({}, item)
-            bunTop.name += ' (верх)'
-            bunTop.subtype = 'top'
-            cart.push(bunTop)
-
-            let bunBottom = Object.assign({}, item)
-            bunBottom.name += ' (низ)'
-            bunBottom.price = 0
-            bunBottom.subtype = 'bottom'
-
-            cart.push(bunBottom)
-        } else {
-            cart.push(item)
-        }
-
-        this.setState((prevState: IState) => ({
-            ...prevState,
-            cart: cart
-        }))
+        setState({
+            ...state,
+            cart
+        })
     }
 
-    removeFromCart = (id: string) => {
-        const cart = this.state.cart
+    const removeFromCart = (id: string) => {
+        const cart = [...state.cart]
         if (cart) {
             let removeItemIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem._id === id)
             if (removeItemIndex !== -1) {
                 cart.splice(removeItemIndex, 1)
 
-                this.setState((prevState: IState) => ({
-                    ...prevState,
-                    cart: cart
-                }))
+                setState({
+                    ...state,
+                    cart
+                })
             }
         }
     }
 
-    render() {
-        return (
-            <>
-                <AppHeader />
-                <div className={appStyles.container}>
-                    <main className={appStyles.main}>
-                        <section className={`${appStyles.section} ${appStyles.limitedHeight} mb-10 mr-10`}>
-                            <BurgerIngredients items={this.state.items} cart={this.state.cart} addToCartHandler={this.addToCart} />
-                        </section>
-                        <section className={`${appStyles.section} pt-25`}>
-                            <BurgerConstructor items={this.state.cart} removeFromCart={this.removeFromCart} />
-                        </section>
-                    </main>
-                </div>
-            </>
-        );
-    }
+    useEffect(() => {
+        if (state.isLoaded) {
+            addToCart(state.items)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state.isLoaded, state.items])
+
+    return (
+        <>
+            <AppHeader />
+            <div className={appStyles.container}>
+                <main className={appStyles.main}>
+                    <section className={`${appStyles.section} ${appStyles.limitedHeight} mb-10 mr-10`}>
+                        {state.isLoaded && !state.hasErrors && <BurgerIngredients items={state.items} cart={state.cart} />}
+                        {!state.isLoaded && !state.hasErrors && <p className="">Рагружаем контейнер с ингридиентами...</p> }
+                        {state.isLoaded && state.hasErrors && <p className="">При разгрузке контейнера с ингридиентами произошла нелепая ошибка. Исправляем...</p> }
+                    </section>
+                    <section className={`${appStyles.section} pt-25`}>
+                        <BurgerConstructor items={state.cart} removeFromCart={removeFromCart} />
+                    </section>
+                </main>
+            </div>
+        </>
+    );
 }
 
 export default App;

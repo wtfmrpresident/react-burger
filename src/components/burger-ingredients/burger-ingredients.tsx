@@ -2,14 +2,12 @@ import React, {useState} from "react";
 import Tabs from "./tabs";
 import IngredientsList from "./ingredients-list";
 import IBurgerItem from "../../interfaces/IBurgerItem";
-import IAddToCart from "../../interfaces/IAddToCart";
 import ITitles from "../../interfaces/ITitles";
 import ingredientsStyle from "./ingredients-list.module.css";
 
 interface IProps {
     items: IBurgerItem[],
     cart: IBurgerItem[],
-    addToCartHandler: IAddToCart
 }
 
 const BurgerIngredients = (props: IProps) => {
@@ -62,7 +60,8 @@ const BurgerIngredients = (props: IProps) => {
                         return (
                             <div key={type}>
                                 <h2 className="text text_type_main-medium" ref={getRefHtmlElement(type)}>{title[1]}</h2>
-                                <IngredientsList items={items} cart={props.cart} addToCartHandler={props.addToCartHandler} />
+
+                                <IngredientsList items={items} cart={props.cart} />
                             </div>
                         )
                     })}
@@ -72,4 +71,4 @@ const BurgerIngredients = (props: IProps) => {
     )
 }
 
-export default BurgerIngredients;
+export default BurgerIngredients
