@@ -1,17 +1,20 @@
-import React from "react";
+import React, {useContext} from "react";
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientItemStyle from './ingredient-item.module.css';
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import useModal from "../modal/use-modal";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import {CartItemsContext} from "../../services/burger-context";
 
-function IngredientItem(props: { item: IBurgerItem, cart: IBurgerItem[]}) {
+function IngredientItem(props: { item: IBurgerItem}) {
+    const {cartItemsState} = useContext(CartItemsContext)
+
     function hasCartItem(item: IBurgerItem, cart: IBurgerItem[]): boolean {
-        return cart.some((cartItem) => cartItem._id === item._id)
+        return cart && cart.some((cartItem) => cartItem._id === item._id)
     }
 
-    const hasCartThisItem = hasCartItem(props.item, props.cart)
+    const hasCartThisItem = hasCartItem(props.item, cartItemsState)
     const { isOpen, toggle } = useModal();
 
     return (
