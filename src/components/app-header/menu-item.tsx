@@ -5,7 +5,7 @@ import IMenuItem from "../../interfaces/IMenuItem";
 function MenuItem(props: {item: IMenuItem, isActive: boolean}) {
     return (
         <a
-            className={`${appHeaderStyles.menuText} text text_type_main-default${props.isActive && ' ' + appHeaderStyles.active}`}
+            className={`${appHeaderStyles.menu_text} text text_type_main-default${props.isActive && ' ' + appHeaderStyles.active}`}
             href="/#"
             onClick={(e) => e.preventDefault()}
         >

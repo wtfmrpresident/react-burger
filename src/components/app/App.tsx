@@ -4,7 +4,7 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constuctor/burger-constructor";
 import IBurgerItem from "../../interfaces/IBurgerItem"
 import appStyles from  './app.module.css';
-import {IngredientItemsContext, CartItemsContext} from "../../services/burger-context";
+import {IngredientItemsContext, CartItemsContext, CartTotalContext} from "../../services/burger-context";
 import cartReducer from "../../services/cart-reducer";
 
 const API_URL = 'https://norma.nomoreparties.space/api/ingredients'
@@ -16,6 +16,8 @@ function App() {
     const [cartItemsState, cartItemDispatcher] = useReducer(cartReducer, cartItemsInitialState, undefined)
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
     const [hasErrors, setHasErrors] = useState<boolean>(false)
+
+    const [totalPrice, setTotalPrice] = useState<number | null>(null)
 
     useEffect(() => {
         setIsLoaded(false)
@@ -36,12 +38,22 @@ function App() {
 
     useEffect(() => {
         if (isLoaded) {
-            ingredientItems.forEach((item) => {
+            const buns = ingredientItems.filter((item) => item.type === 'bun')
+            const ingredients = ingredientItems.filter((item) => item.type !== 'bun')
+
+            // Добавляем случайную булку
+            cartItemDispatcher({
+                type: "add",
+                payload: buns[Math.floor(Math.random() * buns.length)]
+            })
+
+            // Добавляем случайное кол-во
+            for (let i = 0; i <= Math.floor(Math.random() * ingredients.length); i++) {
                 cartItemDispatcher({
                     type: "add",
-                    payload: item
+                    payload: ingredients[i]
                 })
-            })
+            }
         }
     }, [isLoaded, ingredientItems])
 
@@ -58,7 +70,9 @@ function App() {
                                 {isLoaded && hasErrors && <p className="">При разгрузке контейнера с ингридиентами произошла нелепая ошибка. Исправляем...</p> }
                             </section>
                             <section className={`${appStyles.section} pt-25`}>
-                                <BurgerConstructor />
+                                <CartTotalContext.Provider value={{totalPrice, setTotalPrice}}>
+                                    <BurgerConstructor />
+                                </CartTotalContext.Provider>
                             </section>
                         </main>
                     </CartItemsContext.Provider>

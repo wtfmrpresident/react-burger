@@ -1,34 +1,31 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import BurgerConstructorItem from "./burger-constructor-item";
-import {Button, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import burgerConstructorStyles from "./burger-constructor.module.css";
-import OrderDetails from "../order-details/order-details";
-import Modal from "../modal/modal";
-import useModal from "../modal/use-modal";
-import {CartItemsContext} from "../../services/burger-context";
+import {CartItemsContext, CartTotalContext} from "../../services/burger-context";
+import {BurgerConstructorTotal} from "./burger-constructor-total";
 
 function BurgerConstructor() {
-    const { isOpen, toggle } = useModal();
-
     const {cartItemsState} = useContext(CartItemsContext)
+    const {setTotalPrice} = useContext(CartTotalContext)
 
     const bunTop = cartItemsState ? cartItemsState.find((cartItem: IBurgerItem) => cartItem.subtype === 'top') : null
     const bunBottom = cartItemsState ? cartItemsState.find((cartItem: IBurgerItem) => cartItem.subtype === 'bottom') : null
 
     const items = cartItemsState && cartItemsState.filter((item) => item.type !== 'bun')
 
-    let cartTotal: number = (bunTop ? bunTop.price : 0) + (bunBottom ? bunBottom.price : 0)
+    useEffect(() => {
+        let total: number = (bunTop ? bunTop.price : 0) + (bunBottom ? bunBottom.price : 0)
 
-    items.forEach((item) => {
-        cartTotal += item.price
-    })
+        items.forEach((item) => {
+            total += item.price
+        })
+
+        setTotalPrice(total)
+    }, [setTotalPrice, cartItemsState, bunTop, bunBottom, items])
 
     return (
         <>
-            <Modal isOpen={isOpen} hide={toggle}>
-                <OrderDetails orderId="0345636" />
-            </Modal>
             <div className="mt-10">
                 {bunTop && <BurgerConstructorItem item={bunTop} key={'top_' + bunTop._id} isDrugEnabled={false} />}
 
@@ -40,14 +37,8 @@ function BurgerConstructor() {
 
                 {bunBottom && <BurgerConstructorItem item={bunBottom} key={'bottom_' + bunBottom._id} isDrugEnabled={false} />}
             </div>
-            {items.length > 0 ? (
-                <div className="mt-10" style={{display: "flex", alignItems: "center", justifyContent:"flex-end"}}>
-                    <p className="text text_type_digits-medium mr-10">
-                        <span className="text text_type_digits-medium">{cartTotal}</span>
-                        <CurrencyIcon type="primary" />
-                    </p>
-                    <Button type="primary" size="large" onClick={toggle}>Оформить заказ</Button>
-                </div>
+            {(bunTop && bunBottom) || items.length > 0 ? (
+                <BurgerConstructorTotal />
             ) : null}
         </>
     )

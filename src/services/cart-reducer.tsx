@@ -13,7 +13,7 @@ function isItemAlreadyInCart(cartItems: IBurgerItem[], item: IBurgerItem): boole
     return cartItems.some((cartItem) => cartItem._id === item._id)
 }
 
-function replaceBun(cartItems: IBurgerItem[], item: IBurgerItem): IBurgerItem[] {
+function replacedBun(cartItems: IBurgerItem[], item: IBurgerItem): IBurgerItem[] {
     const cart = [...cartItems]
 
     // Не даем добавлять несколько булочек, вместо этого меняем одну на другую
@@ -48,7 +48,7 @@ function add(cartItems: IBurgerItem[], action: ICartActions): IBurgerItem[] {
         }
 
         if (item.type === 'bun') {
-            return replaceBun(cartItems, item)
+            return replacedBun(cartItems, item)
         }
 
         cart.push(item)

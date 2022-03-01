@@ -25,12 +25,12 @@ function AppHeader() {
     return (
         <header className={appHeaderStyles.header}>
             <div className={appHeaderStyles.container}>
-                <nav className={appHeaderStyles.navBar}>
-                    <div className={appHeaderStyles.menuLeft}>
+                <nav className={appHeaderStyles.nav_bar}>
+                    <div className={appHeaderStyles.menu_left}>
                         <Menu items={leftMenu} />
                     </div>
                     <Logo />
-                    <div className={appHeaderStyles.menuRight}>
+                    <div className={appHeaderStyles.menu_right}>
                         <Menu items={rightMenu} />
                     </div>
                 </nav>
