@@ -77,5 +77,7 @@ export default function cartReducer(state: IBurgerItem[], action: ICartActions):
             return add(state, action)
         case "remove":
             return remove(state, action)
+        default:
+            return state
     }
 }

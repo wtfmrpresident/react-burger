@@ -8,12 +8,12 @@ interface IIngredientItems {
 
 interface ICartItems {
     cartItemsState: IBurgerItem[],
-    cartItemDispatcher: Dispatch<ICartActions>
+    cartItemDispatcher: (Dispatch<ICartActions>)
 }
 
 interface ICartTotal {
     totalPrice: number | null,
-    setTotalPrice: Dispatch<SetStateAction<number | null>>
+    setTotalPrice: (Dispatch<SetStateAction<number | null>>)
 }
 
 export const IngredientItemsContext = React.createContext<IIngredientItems>({ingredientItems: []})

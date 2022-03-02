@@ -23,7 +23,12 @@ function App() {
         setIsLoaded(false)
         setHasErrors(false)
         fetch(API_URL)
-            .then((result) => result.json())
+            .then((response) => {
+                if (!response.ok) {
+                    return Promise.reject(new Error(response.statusText))
+                }
+                return response.json()
+            })
             .then((result) => {
                 if (result && result.success) {
                     setIngredientItems(result.data)
@@ -61,22 +66,22 @@ function App() {
         <>
             <AppHeader />
             <div className={appStyles.container}>
-                <IngredientItemsContext.Provider value={{ ingredientItems }}>
-                    <CartItemsContext.Provider value={{cartItemsState, cartItemDispatcher}}>
-                        <main className={appStyles.main}>
+                <CartItemsContext.Provider value={{cartItemsState, cartItemDispatcher}}>
+                    <main className={appStyles.main}>
+                        <IngredientItemsContext.Provider value={{ ingredientItems }}>
                             <section className={`${appStyles.section} ${appStyles.limitedHeight} mb-10 mr-10`}>
                                 {isLoaded && !hasErrors && <BurgerIngredients />}
                                 {!isLoaded && !hasErrors && <p className="">Рагружаем контейнер с ингридиентами...</p> }
                                 {isLoaded && hasErrors && <p className="">При разгрузке контейнера с ингридиентами произошла нелепая ошибка. Исправляем...</p> }
                             </section>
-                            <section className={`${appStyles.section} pt-25`}>
-                                <CartTotalContext.Provider value={{totalPrice, setTotalPrice}}>
-                                    <BurgerConstructor />
-                                </CartTotalContext.Provider>
-                            </section>
-                        </main>
-                    </CartItemsContext.Provider>
-                </IngredientItemsContext.Provider>
+                        </IngredientItemsContext.Provider>
+                        <section className={`${appStyles.section} pt-25`}>
+                            <CartTotalContext.Provider value={{totalPrice, setTotalPrice}}>
+                                <BurgerConstructor />
+                            </CartTotalContext.Provider>
+                        </section>
+                    </main>
+                </CartItemsContext.Provider>
             </div>
         </>
     );
