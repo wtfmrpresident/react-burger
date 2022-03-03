@@ -24,7 +24,7 @@ function Modal(props: {
                         <CloseIcon type="primary" onClick={props.hide} />
                     </div>
                 </div>
-                <div className={`${modalStyles.contentContainer}`}>
+                <div className={`${modalStyles.content_container}`}>
                     <div className={`${modalStyles.content}`}>
                         {props.children}
                     </div>

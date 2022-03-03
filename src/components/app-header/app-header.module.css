@@ -12,23 +12,23 @@
     margin: 0 auto;
 }
 
-.navBar {
+.nav_bar {
     display: flex;
     align-items: center;
 }
 
-.navBar > * {
+.nav_bar > * {
     flex: 1;
     display: flex;
     align-content: center;
     justify-content: space-around;
 }
 
-.menuLeft {
+.menu_left {
     justify-content: flex-start;
 }
 
-.menuRight {
+.menu_right {
     justify-content: flex-end;
 }
 
@@ -59,11 +59,11 @@
     color: #ffffff;
 }
 
-.menuText {
+.menu_text {
     display: flex;
     align-items: center;
 }
 
-.menuText svg {
+.menu_text svg {
     margin-right: 8px;
 }

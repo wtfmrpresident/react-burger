@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useContext} from "react";
 import {DragIcon, ConstructorElement} from '@ya.praktikum/react-developer-burger-ui-components';
-import IRemoveFromCart from "../../interfaces/IRemoveFromCart";
 import IBurgerItem from "../../interfaces/IBurgerItem";
+import {CartItemsContext} from "../../services/burger-context";
 
-function BurgerConstructorItem(props: {item: IBurgerItem, removeFromCart: IRemoveFromCart, isDrugEnabled: boolean}) {
+function BurgerConstructorItem(props: {item: IBurgerItem, isDrugEnabled: boolean}) {
+    const {cartItemDispatcher} = useContext(CartItemsContext)
+
     return (
         <div className="mb-4 mr-4" style={{display: "flex", alignItems: "center", justifyContent: "flex-end"}}>
             <div style={{width: "32px"}}>
@@ -15,7 +17,7 @@ function BurgerConstructorItem(props: {item: IBurgerItem, removeFromCart: IRemov
                 price={props.item.price}
                 type={props.item.subtype}
                 isLocked={props.item.type === 'bun'}
-                handleClose={() => props.removeFromCart(props.item._id)}
+                handleClose={() => cartItemDispatcher({type: "remove", payload: props.item})}
             />
         </div>
     )

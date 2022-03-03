@@ -1,16 +1,14 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import Tabs from "./tabs";
 import IngredientsList from "./ingredients-list";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import ITitles from "../../interfaces/ITitles";
 import ingredientsStyle from "./ingredients-list.module.css";
+import {IngredientItemsContext} from "../../services/burger-context";
 
-interface IProps {
-    items: IBurgerItem[],
-    cart: IBurgerItem[],
-}
+const BurgerIngredients = () => {
+    const {ingredientItems} = useContext(IngredientItemsContext)
 
-const BurgerIngredients = (props: IProps) => {
     const bunRef = React.useRef<HTMLHeadingElement>(null)
     const sauceRef = React.useRef<HTMLHeadingElement>(null)
     const mainRef = React.useRef<HTMLHeadingElement>(null)
@@ -55,13 +53,13 @@ const BurgerIngredients = (props: IProps) => {
                 <div className={`${ingredientsStyle.scroll} pr-4`}>
                     {Object.entries(titles()).map((title: [string, string]) => {
                         const type = title[0]
-                        const items = props.items ? props.items.filter((item: IBurgerItem) => item.type === type) : []
+                        const items = ingredientItems ? ingredientItems.filter((item: IBurgerItem) => item.type === type) : []
 
                         return (
                             <div key={type}>
                                 <h2 className="text text_type_main-medium" ref={getRefHtmlElement(type)}>{title[1]}</h2>
 
-                                <IngredientsList items={items} cart={props.cart} />
+                                <IngredientsList items={items} />
                             </div>
                         )
                     })}
