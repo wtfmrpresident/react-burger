@@ -2,17 +2,19 @@ import React, {useContext, useEffect} from "react";
 import BurgerConstructorItem from "./burger-constructor-item";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import burgerConstructorStyles from "./burger-constructor.module.css";
-import {CartItemsContext, CartTotalContext} from "../../services/burger-context";
+import {CartTotalContext} from "../../services/burger-context";
 import {BurgerConstructorTotal} from "./burger-constructor-total";
+import {useSelector} from "react-redux";
+import {AppRootState} from "../../store";
 
 function BurgerConstructor() {
-    const {cartItemsState} = useContext(CartItemsContext)
+    const cartItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.cartItems)
     const {setTotalPrice} = useContext(CartTotalContext)
 
     const bunTop = cartItemsState ? cartItemsState.find((cartItem: IBurgerItem) => cartItem.subtype === 'top') : null
     const bunBottom = cartItemsState ? cartItemsState.find((cartItem: IBurgerItem) => cartItem.subtype === 'bottom') : null
 
-    const items = cartItemsState && cartItemsState.filter((item) => item.type !== 'bun')
+    const items = cartItemsState && cartItemsState.filter((item: IBurgerItem) => item.type !== 'bun')
 
     useEffect(() => {
         let total: number = (bunTop ? bunTop.price : 0) + (bunBottom ? bunBottom.price : 0)
@@ -30,7 +32,7 @@ function BurgerConstructor() {
                 {bunTop && <BurgerConstructorItem item={bunTop} key={'top_' + bunTop._id} isDrugEnabled={false} />}
 
                 <div className={`${burgerConstructorStyles.scroll}`}>
-                    {items ? items.map((item) => {
+                    {items ? items.map((item: IBurgerItem) => {
                         return <BurgerConstructorItem item={item} key={item._id} isDrugEnabled={true} />
                     }) : null}
                 </div>

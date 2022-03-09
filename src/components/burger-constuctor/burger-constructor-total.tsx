@@ -1,13 +1,16 @@
 import React, {useContext, useState} from "react";
-import {CartItemsContext, CartTotalContext} from "../../services/burger-context";
+import {CartTotalContext} from "../../services/burger-context";
 import {Button, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import useModal from "../modal/use-modal";
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import burgerConstructorTotalStyles from './burger-constructor-total.module.css'
+import {useSelector} from "react-redux";
+import {AppRootState} from "../../store";
+import IBurgerItem from "../../interfaces/IBurgerItem";
 
 export const BurgerConstructorTotal = () => {
-    const {cartItemsState} = useContext(CartItemsContext)
+    const cartItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.cartItems)
     const [orderNumber, setOrderNumber] = useState<number | null>(null)
     const [hasError, setHasError] = useState<boolean>(false)
     const {totalPrice} = useContext(CartTotalContext)

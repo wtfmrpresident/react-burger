@@ -5,10 +5,11 @@ import IBurgerItem from "../../interfaces/IBurgerItem";
 import useModal from "../modal/use-modal";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {CartItemsContext} from "../../services/burger-context";
+import {useSelector} from "react-redux";
+import {AppRootState} from "../../store";
 
 function IngredientItem(props: { item: IBurgerItem}) {
-    const {cartItemsState} = useContext(CartItemsContext)
+    const cartItemsState = useSelector((state: AppRootState) => state.cart.cartItems)
 
     function hasCartItem(item: IBurgerItem, cart: IBurgerItem[]): boolean {
         return cart && cart.some((cartItem) => cartItem._id === item._id)
