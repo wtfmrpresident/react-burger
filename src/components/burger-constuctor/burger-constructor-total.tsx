@@ -1,62 +1,44 @@
-import React, {useContext, useState} from "react";
-import {CartTotalContext} from "../../services/burger-context";
+import React, {useEffect} from "react";
 import {Button, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import useModal from "../modal/use-modal";
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import burgerConstructorTotalStyles from './burger-constructor-total.module.css'
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppRootState} from "../../store";
 import IBurgerItem from "../../interfaces/IBurgerItem";
+import {totalPriceSelector} from "../../services/total-price";
+import {createOrder} from "../../services/order";
 
 export const BurgerConstructorTotal = () => {
-    const cartItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.cartItems)
-    const [orderNumber, setOrderNumber] = useState<number | null>(null)
-    const [hasError, setHasError] = useState<boolean>(false)
-    const {totalPrice} = useContext(CartTotalContext)
+    const dispatch = useDispatch()
 
-    const CREATE_ORDER_URL = 'https://norma.nomoreparties.space/api/orders'
+    const totalPrice = useSelector(totalPriceSelector)
+
+    const bunItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.bunItems)
+    const ingredientItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.ingredientItems)
+    const {orderNumber, request, failed} = useSelector((state: AppRootState) => state.order)
 
     const { isOpen, toggle } = useModal();
 
-    const createOrder = () => {
-        setHasError(false)
-
-        const postData = cartItemsState.map((cartItem) => {
-            return cartItem._id
-        })
-
-        fetch(CREATE_ORDER_URL, {
-            method: 'POST',
-            body: JSON.stringify({"ingredients": postData}),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    return Promise.reject(new Error(response.statusText))
-                }
-                return response.json()
-            })
-            .then((result) => {
-                if (result.success && result.order.number) {
-                    setOrderNumber(result.order.number)
-                }
-
-                toggle()
-            })
-            .catch((error) => {
-                console.log(error)
-                setHasError(true)
-            })
+    const handleCreateOrderClick = () => {
+        const cartItems = bunItemsState.concat(ingredientItemsState)
+        dispatch(createOrder(cartItems))
     }
+
+    useEffect(() => {
+        if (orderNumber) {
+            toggle()
+        }
+        // Тут точно не должно быть зависимости от toggle, но без него при сборке появляется WARNING
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [orderNumber])
 
     return (
         <>
             {orderNumber && (
                     <Modal isOpen={isOpen} hide={toggle}>
-                        <OrderDetails orderNumber={orderNumber} hasError={hasError} />
+                        <OrderDetails orderNumber={orderNumber} hasError={failed} />
                     </Modal>
                 )
             }
@@ -66,7 +48,7 @@ export const BurgerConstructorTotal = () => {
                     <span className="text text_type_digits-medium">{totalPrice}</span>
                     <CurrencyIcon type="primary" />
                 </p>
-                <Button type="primary" size="large" onClick={createOrder}>Оформить заказ</Button>
+                <Button type="primary" size="large" onClick={handleCreateOrderClick} disabled={request}>Оформить заказ</Button>
             </div>
         </>
     )

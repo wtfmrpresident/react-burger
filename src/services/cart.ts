@@ -2,19 +2,25 @@ import IBurgerItem from "../interfaces/IBurgerItem";
 import {createSlice, PayloadAction, Slice} from "@reduxjs/toolkit";
 
 interface ICartItemsState {
-    cartItems: IBurgerItem[] | []
+    bunItems: IBurgerItem[]
+    ingredientItems: IBurgerItem[]
+    dragIndex?: number,
+    hoverIndex?: number
+}
+
+interface IMoveIngredientAction {
+    item: IBurgerItem,
+    dragIndex: number,
+    hoverIndex: number
 }
 
 const initialState: ICartItemsState = {
-    cartItems: [],
+    bunItems: [],
+    ingredientItems: [],
 }
 
 function isBunAlreadyInCart(cartItems: IBurgerItem[]): boolean {
     return cartItems.some((cartItem) => cartItem.type === 'bun')
-}
-
-function isItemAlreadyInCart(cartItems: IBurgerItem[], item: IBurgerItem): boolean {
-    return cartItems.some((cartItem) => cartItem._id === item._id)
 }
 
 function replacedBun(cartItems: IBurgerItem[], item: IBurgerItem): IBurgerItem[] {
@@ -33,8 +39,8 @@ function replacedBun(cartItems: IBurgerItem[], item: IBurgerItem): IBurgerItem[]
         }
     }
 
-    const bunTop: IBurgerItem = {...item, name: item.name + ' (верх)', subtype: 'top'}
-    const bunBottom: IBurgerItem = {...item, name: item.name + ' (низ)', subtype: 'bottom'}
+    const bunTop: IBurgerItem = {...item, name: item.name + ' (верх)', subtype: 'top', quantity: 1}
+    const bunBottom: IBurgerItem = {...item, name: item.name + ' (низ)', subtype: 'bottom', quantity: 1}
 
     cart.push(bunTop)
     cart.push(bunBottom)
@@ -47,47 +53,52 @@ export const cartSlice: Slice = createSlice({
     initialState: initialState,
     reducers: {
         addToCart: (state: ICartItemsState, action: PayloadAction<IBurgerItem>) => {
-            const cart = [...state.cartItems]
-            const item = {...action.payload}
-
-            if (item) {
-                if (isItemAlreadyInCart(cart, item)) {
-                    return state
-                }
-
-                if (item.type === 'bun') {
+            const ingredient = {...action.payload}
+            if (ingredient) {
+                if (ingredient.type === 'bun') {
                     return {
                         ...state,
-                        cartItems: replacedBun(state.cartItems, item)
+                        bunItems: replacedBun(state.ingredientItems, ingredient)
                     }
                 }
 
-                cart.push(item)
-            }
-
-            return {
-                ...state,
-                cartItems: cart
+                const item = state.ingredientItems.find(cartItem => cartItem._id === ingredient._id)
+                if (item) {
+                    item.quantity++
+                } else {
+                    state.ingredientItems.push({...ingredient, quantity: 1})
+                }
             }
         },
 
         removeFromCart: (state: ICartItemsState, action: PayloadAction<IBurgerItem>) => {
-            const cart = [...state.cartItems]
-            if (cart) {
-                let removeItemIndex = cart.findIndex((cartItem: IBurgerItem) => cartItem._id === action.payload._id)
-                if (removeItemIndex !== -1) {
-                    cart.splice(removeItemIndex, 1)
+            const ingredient = {...action.payload}
+            const item = state.ingredientItems.find(cartItem => cartItem._id === ingredient._id)
+
+            if (item) {
+                if (item && item.quantity <= 1) {
+                    const removeItemIndex = state.ingredientItems.findIndex((cartItem: IBurgerItem) => cartItem._id === action.payload._id)
+                    if (removeItemIndex !== -1) {
+                        state.ingredientItems.splice(removeItemIndex, 1)
+                    }
+                } else {
+                    item.quantity--;
                 }
             }
+        },
 
-            return {
-                ...state,
-                cartItems: cart
-            }
+        moveIngredient: (state: ICartItemsState, action: PayloadAction<IMoveIngredientAction>) => {
+            const sortableCart = [...state.ingredientItems]
+            const dragItem = sortableCart[action.payload.dragIndex]
+
+            sortableCart.splice(action.payload.dragIndex, 1)
+            sortableCart.splice(action.payload.hoverIndex, 0, dragItem)
+
+            state.ingredientItems = sortableCart
         }
     }
 })
 
-export const {addToCart, removeFromCart} = cartSlice.actions
+export const {addToCart, removeFromCart, moveIngredient} = cartSlice.actions
 
 export default cartSlice.reducer

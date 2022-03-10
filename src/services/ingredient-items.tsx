@@ -27,11 +27,18 @@ export const ingredientItemsSlice: Slice = createSlice({
             }
         },
         getIngredientItemsSuccess: (state: IIngredientItemsState, action: PayloadAction<IBurgerItem[]>) => {
+            const items = action.payload.map((item) => {
+                return {
+                    ...item,
+                    quantity: 0
+                }
+            })
+
             return {
                 ...state,
                 request: false,
                 failed: false,
-                items: action.payload
+                items
             }
         },
         getIngredientItemsFailed: (state: IIngredientItemsState) => {

@@ -6,8 +6,7 @@ import ITitles from "../../interfaces/ITitles";
 import ingredientsStyle from "./ingredients-list.module.css";
 import {useSelector} from "react-redux";
 import {AppRootState} from "../../store";
-import {InView, useInView} from "react-intersection-observer";
-import {array} from "prop-types";
+import {InView} from "react-intersection-observer";
 
 const BurgerIngredients = () => {
     const ingredientItems = useSelector((state: AppRootState) => state.ingredients.items)
