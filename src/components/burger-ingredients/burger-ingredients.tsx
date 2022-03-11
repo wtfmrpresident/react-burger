@@ -7,6 +7,9 @@ import ingredientsStyle from "./ingredients-list.module.css";
 import {useSelector} from "react-redux";
 import {AppRootState} from "../../store";
 import {InView} from "react-intersection-observer";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from "../modal/modal";
+import useModal from "../modal/use-modal";
 
 const BurgerIngredients = () => {
     const ingredientItems = useSelector((state: AppRootState) => state.ingredients.items)
@@ -30,6 +33,18 @@ const BurgerIngredients = () => {
         }
 
         setSelectedTab(value)
+    }
+
+    const [modalItem, setModalItem] = useState<IBurgerItem | null>(null)
+    const {isOpen, toggle} = useModal()
+
+    const handleModalToggle = (item?: IBurgerItem) => {
+        if (!isOpen && item) {
+            setModalItem(item)
+        } else {
+            setModalItem(null)
+        }
+        toggle()
     }
 
     const handleHeadingScroll = (type: string, inView: boolean, entry: IntersectionObserverEntry) => {
@@ -77,6 +92,12 @@ const BurgerIngredients = () => {
     return (
         <>
             <div>
+                {modalItem && (
+                    <Modal isOpen={isOpen} hide={handleModalToggle} title="Детали ингредиента">
+                        <IngredientDetails item={modalItem} />
+                    </Modal>
+                )}
+
                 <h1 className="mt-10 mb-5 text text_type_main-large">Соберите Бургер</h1>
                 <Tabs selectedTab={selectedTab} setSelectedTab={handleChangeTab} />
 
@@ -91,7 +112,7 @@ const BurgerIngredients = () => {
                                     <h2 className="text text_type_main-medium" ref={getRefHtmlElement(type)}>{title[1]}</h2>
                                 </InView>
 
-                                <IngredientsList items={items} />
+                                <IngredientsList items={items} toggleModal={handleModalToggle} />
                             </div>
                         )
                     })}

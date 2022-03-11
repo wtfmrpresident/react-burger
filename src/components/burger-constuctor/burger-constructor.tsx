@@ -31,22 +31,21 @@ function BurgerConstructor() {
         <>
             <div className={`${burgerConstructorStyles.container} ${ingredientIsHover ? burgerConstructorStyles.container_active : null} mt-10`} ref={ingredientDropTarget}>
                 { bunTop && (
-                    <BurgerConstructorItem item={bunTop} key={'top_' + bunTop._id} isDrugEnabled={false} />
+                    <BurgerConstructorItem item={bunTop} key={bunTop.uuid} isDrugEnabled={false} />
                 )}
 
                 <div className={`${burgerConstructorStyles.scroll}`}>
                     {ingredientItemsState ? ingredientItemsState.map((item: IBurgerItem, index) => {
-                        return <BurgerConstructorItem item={item} key={item._id} index={index} isDrugEnabled={true} />
+                        return <BurgerConstructorItem item={item} key={item.uuid} index={index} isDrugEnabled={true} />
                     }) : null}
                 </div>
 
                 { bunBottom && (
-                    <BurgerConstructorItem item={bunBottom} key={'bottom_' + bunBottom._id} isDrugEnabled={false} />
+                    <BurgerConstructorItem item={bunBottom} key={bunBottom.uuid} isDrugEnabled={false} />
                 )}
             </div>
-            {(bunTop && bunBottom) || ingredientItemsState.length > 0 ? (
-                <BurgerConstructorTotal />
-            ) : null}
+
+            <BurgerConstructorTotal />
         </>
     )
 }

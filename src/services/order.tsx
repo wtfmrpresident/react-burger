@@ -1,5 +1,6 @@
 import {createSlice, Dispatch, PayloadAction, Slice} from "@reduxjs/toolkit";
 import IBurgerItem from "../interfaces/IBurgerItem";
+import {baseUrl, checkResponse} from "./api";
 
 interface IOrderState {
     orderNumber: number | null,
@@ -46,7 +47,7 @@ export const orderSlice: Slice = createSlice({
 
 export const {getOrderRequest, getOrderSuccess, getOrderFailed} = orderSlice.actions
 
-const CREATE_ORDER_URL = 'https://norma.nomoreparties.space/api/orders'
+const CREATE_ORDER_URL = baseUrl + '/orders'
 
 export const createOrder = (cartItems: IBurgerItem[]) => async (dispatch: Dispatch) => {
     // @ts-ignore
@@ -56,23 +57,17 @@ export const createOrder = (cartItems: IBurgerItem[]) => async (dispatch: Dispat
         return cartItem._id
     })
 
-    fetch(CREATE_ORDER_URL, {
+    return fetch(CREATE_ORDER_URL, {
         method: 'POST',
         body: JSON.stringify({"ingredients": postData}),
         headers: {
             'Content-Type': 'application/json'
         },
     })
-        .then((response) => {
-            if (!response.ok) {
-                return Promise.reject(new Error(response.statusText))
-            }
-            return response.json()
-        })
+        .then(checkResponse)
         .then((result) => {
             if (result.success && result.order.number) {
                 dispatch(getOrderSuccess(result.order.number))
-
             }
         })
         .catch((error) => {

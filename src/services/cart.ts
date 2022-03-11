@@ -1,5 +1,6 @@
 import IBurgerItem from "../interfaces/IBurgerItem";
 import {createSlice, PayloadAction, Slice} from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from 'uuid';
 
 interface ICartItemsState {
     bunItems: IBurgerItem[]
@@ -39,8 +40,8 @@ function replacedBun(cartItems: IBurgerItem[], item: IBurgerItem): IBurgerItem[]
         }
     }
 
-    const bunTop: IBurgerItem = {...item, name: item.name + ' (верх)', subtype: 'top', quantity: 1}
-    const bunBottom: IBurgerItem = {...item, name: item.name + ' (низ)', subtype: 'bottom', quantity: 1}
+    const bunTop: IBurgerItem = {...item, name: item.name + ' (верх)', subtype: 'top', uuid: uuidv4()}
+    const bunBottom: IBurgerItem = {...item, name: item.name + ' (низ)', subtype: 'bottom', uuid: uuidv4()}
 
     cart.push(bunTop)
     cart.push(bunBottom)
@@ -62,12 +63,8 @@ export const cartSlice: Slice = createSlice({
                     }
                 }
 
-                const item = state.ingredientItems.find(cartItem => cartItem._id === ingredient._id)
-                if (item) {
-                    item.quantity++
-                } else {
-                    state.ingredientItems.push({...ingredient, quantity: 1})
-                }
+
+                state.ingredientItems.push({...ingredient, uuid: uuidv4()})
             }
         },
 
@@ -76,14 +73,18 @@ export const cartSlice: Slice = createSlice({
             const item = state.ingredientItems.find(cartItem => cartItem._id === ingredient._id)
 
             if (item) {
-                if (item && item.quantity <= 1) {
-                    const removeItemIndex = state.ingredientItems.findIndex((cartItem: IBurgerItem) => cartItem._id === action.payload._id)
-                    if (removeItemIndex !== -1) {
-                        state.ingredientItems.splice(removeItemIndex, 1)
-                    }
-                } else {
-                    item.quantity--;
+                const removeItemIndex = state.ingredientItems.findIndex((cartItem: IBurgerItem) => cartItem.uuid === action.payload.uuid)
+                if (removeItemIndex !== -1) {
+                    state.ingredientItems.splice(removeItemIndex, 1)
                 }
+            }
+        },
+
+        resetCart: (state: ICartItemsState) => {
+            return {
+                ...state,
+                bunItems: [],
+                ingredientItems: []
             }
         },
 
@@ -99,6 +100,6 @@ export const cartSlice: Slice = createSlice({
     }
 })
 
-export const {addToCart, removeFromCart, moveIngredient} = cartSlice.actions
+export const {addToCart, removeFromCart, moveIngredient, resetCart} = cartSlice.actions
 
 export default cartSlice.reducer

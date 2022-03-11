@@ -1,5 +1,6 @@
 import IBurgerItem from "../interfaces/IBurgerItem";
 import {createSlice, Dispatch, PayloadAction, Slice} from "@reduxjs/toolkit";
+import {baseUrl, checkResponse} from "./api";
 
 export interface IIngredientItemsState {
     items: IBurgerItem[] | [],
@@ -13,7 +14,7 @@ const initialState: IIngredientItemsState = {
     failed: false,
 }
 
-const API_URL = 'https://norma.nomoreparties.space/api/ingredients'
+const API_URL = baseUrl + '/ingredients'
 
 export const ingredientItemsSlice: Slice = createSlice({
     name: 'ingredientItems',
@@ -57,12 +58,7 @@ export const getItems = () => async (dispatch: Dispatch) => {
     // @ts-ignore
     dispatch(getIngredientItemsRequest())
     fetch(API_URL)
-        .then((response) => {
-            if (!response.ok) {
-                return Promise.reject(new Error(response.statusText))
-            }
-            return response.json()
-        })
+        .then(checkResponse)
         .then((response) => {
             if (response && response.success) {
                 dispatch(getIngredientItemsSuccess(response.data))

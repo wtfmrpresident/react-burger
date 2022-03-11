@@ -9,6 +9,7 @@ import {AppRootState} from "../../store";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import {totalPriceSelector} from "../../services/total-price";
 import {createOrder} from "../../services/order";
+import {resetCart} from "../../services/cart";
 
 export const BurgerConstructorTotal = () => {
     const dispatch = useDispatch()
@@ -29,6 +30,8 @@ export const BurgerConstructorTotal = () => {
     useEffect(() => {
         if (orderNumber) {
             toggle()
+            // @ts-ignore
+            dispatch(resetCart())
         }
         // Тут точно не должно быть зависимости от toggle, но без него при сборке появляется WARNING
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,19 +40,21 @@ export const BurgerConstructorTotal = () => {
     return (
         <>
             {orderNumber && (
-                    <Modal isOpen={isOpen} hide={toggle}>
-                        <OrderDetails orderNumber={orderNumber} hasError={failed} />
-                    </Modal>
-                )
-            }
+                <Modal isOpen={isOpen} hide={toggle}>
+                    <OrderDetails orderNumber={orderNumber} hasError={failed} />
+                </Modal>
+            )}
 
-            <div className={`${burgerConstructorTotalStyles.container} mt-10`}>
-                <p className="text text_type_digits-medium mr-10">
-                    <span className="text text_type_digits-medium">{totalPrice}</span>
-                    <CurrencyIcon type="primary" />
-                </p>
-                <Button type="primary" size="large" onClick={handleCreateOrderClick} disabled={request}>Оформить заказ</Button>
-            </div>
+            {bunItemsState.length || ingredientItemsState.length > 0 ? (
+                <div className={`${burgerConstructorTotalStyles.container} mt-10`}>
+                    <p className="text text_type_digits-medium mr-10">
+                        <span className="text text_type_digits-medium">{totalPrice}</span>
+                        <CurrencyIcon type="primary" />
+                    </p>
+
+                    <Button type="primary" size="large" onClick={handleCreateOrderClick} disabled={request || bunItemsState.length === 0}>Оформить заказ</Button>
+                </div>
+            ): null}
         </>
     )
 }

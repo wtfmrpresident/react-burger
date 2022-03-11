@@ -8,9 +8,9 @@ export default interface IBurgerItem {
     carbohydrates: number,
     calories: number,
     price: number,
-    quantity: number,
     image: string,
     image_mobile: string,
     image_large: string,
-    __v: number
+    __v: number,
+    uuid?: string
 }

@@ -8,6 +8,10 @@ body {
   background-color: #131316;
 }
 
+.d__flex {
+  display: flex;
+}
+
 .text__center {
   text-align: center;
 }

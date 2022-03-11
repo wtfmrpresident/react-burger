@@ -4,7 +4,8 @@ import IBurgerItem from "../../interfaces/IBurgerItem";
 import {useDispatch} from "react-redux";
 import {removeFromCart, moveIngredient} from "../../services/cart";
 import {useDrag, useDrop} from "react-dnd";
-import type { XYCoord, Identifier } from 'dnd-core'
+import type { XYCoord, Identifier } from 'dnd-core';
+import burgerConstructorItemStyles from './burger-constructor-item.module.css'
 
 interface ISortableIngredient {
     item: IBurgerItem,
@@ -80,22 +81,20 @@ function BurgerConstructorItem(props: {item: IBurgerItem, index?: number, isDrug
         }),
     });
 
-    const price = props.item.price * props.item.quantity
-
     if (props.isDrugEnabled) {
         drag(drop(ref))
     }
 
     const opacity = isDragging ? 0 : 1;
     return (
-        <div ref={ref} className="mb-4 mr-4" style={{display: "flex", alignItems: "center", justifyContent: "flex-end", opacity}} data-handler-id={handlerId}>
-            <div style={{width: "32px"}}>
+        <div ref={ref} className={`${burgerConstructorItemStyles.container} mb-4 mr-4`} style={{opacity}} data-handler-id={handlerId}>
+            <div className={burgerConstructorItemStyles.drag_container}>
                 {props.isDrugEnabled && <DragIcon type="primary"/>}
             </div>
             <ConstructorElement
                 text={props.item.name}
                 thumbnail={props.item.image_mobile}
-                price={price}
+                price={props.item.price}
                 type={props.item.subtype}
                 isLocked={props.item.type === 'bun'}
                 handleClose={() => dispatch(removeFromCart(props.item))}
