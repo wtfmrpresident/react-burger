@@ -1,0 +1,9 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.drag_container {
+    width: 32px;
+}

@@ -22,3 +22,9 @@
     background-color: #4c4cff;
     border-radius: 50%;
 }
+
+.paragraph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

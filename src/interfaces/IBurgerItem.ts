@@ -11,5 +11,6 @@ export default interface IBurgerItem {
     image: string,
     image_mobile: string,
     image_large: string,
-    __v: number
+    __v: number,
+    uuid?: string
 }

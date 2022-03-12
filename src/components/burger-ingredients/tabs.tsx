@@ -10,7 +10,7 @@ interface IProps {
 
 function Tabs(props: IProps) {
     return (
-        <div style={{ display: 'flex' }} className="mb-10">
+        <div className="d__flex mb-10">
             <Tab value="bun" active={props.selectedTab === 'bun'} onClick={(value) => props.setSelectedTab(value)}>
                 Булки
             </Tab>

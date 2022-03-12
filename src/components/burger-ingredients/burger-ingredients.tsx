@@ -1,19 +1,30 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import Tabs from "./tabs";
 import IngredientsList from "./ingredients-list";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import ITitles from "../../interfaces/ITitles";
 import ingredientsStyle from "./ingredients-list.module.css";
-import {IngredientItemsContext} from "../../services/burger-context";
+import {useSelector} from "react-redux";
+import {AppRootState} from "../../store";
+import {InView} from "react-intersection-observer";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from "../modal/modal";
+import useModal from "../modal/use-modal";
 
 const BurgerIngredients = () => {
-    const {ingredientItems} = useContext(IngredientItemsContext)
+    const ingredientItems = useSelector((state: AppRootState) => state.ingredients.items)
 
+    const containerRef = React.useRef<HTMLDivElement>(null)
     const bunRef = React.useRef<HTMLHeadingElement>(null)
     const sauceRef = React.useRef<HTMLHeadingElement>(null)
     const mainRef = React.useRef<HTMLHeadingElement>(null)
 
     const [selectedTab, setSelectedTab] = useState("bun");
+    const [headingPositions, setHeadingPositions] = useState([
+        {type: "bun", entryTop: 0, inView: false},
+        {type: "sauce", entryTop: 0, inView: false},
+        {type: "main", entryTop: 0, inView: false},
+    ])
 
     const handleChangeTab = (value: string) => {
         const refHtmlElement = getRefHtmlElement(value)
@@ -22,6 +33,40 @@ const BurgerIngredients = () => {
         }
 
         setSelectedTab(value)
+    }
+
+    const [modalItem, setModalItem] = useState<IBurgerItem | null>(null)
+    const {isOpen, toggle} = useModal()
+
+    const handleModalToggle = (item?: IBurgerItem) => {
+        if (!isOpen && item) {
+            setModalItem(item)
+        } else {
+            setModalItem(null)
+        }
+        toggle()
+    }
+
+    const handleHeadingScroll = (type: string, inView: boolean, entry: IntersectionObserverEntry) => {
+        const newHeadingPositions = [...headingPositions].map((item) => {
+            if (item.type === type) {
+                item.inView = inView
+                item.entryTop = entry ? entry.boundingClientRect.top : 0
+            }
+            return item
+        })
+        setHeadingPositions(newHeadingPositions)
+
+        // Выбираем только видимые заголовки и из них определяем ближайший к контейнеру элемент
+        const inViewItems = newHeadingPositions.filter(item => item.inView)
+
+        if (inViewItems.length > 0) {
+            const activeHeading = inViewItems.reduce((p, v) => {
+                return (p.entryTop < v.entryTop ? p : v);
+            });
+
+            setSelectedTab(activeHeading.type)
+        }
     }
 
     const getRefHtmlElement = (value: string): React.RefObject<HTMLHeadingElement> => {
@@ -47,19 +92,27 @@ const BurgerIngredients = () => {
     return (
         <>
             <div>
+                {modalItem && (
+                    <Modal isOpen={isOpen} hide={handleModalToggle} title="Детали ингредиента">
+                        <IngredientDetails item={modalItem} />
+                    </Modal>
+                )}
+
                 <h1 className="mt-10 mb-5 text text_type_main-large">Соберите Бургер</h1>
                 <Tabs selectedTab={selectedTab} setSelectedTab={handleChangeTab} />
 
-                <div className={`${ingredientsStyle.scroll} pr-4`}>
+                <div ref={containerRef} className={`${ingredientsStyle.scroll} pr-4`}>
                     {Object.entries(titles()).map((title: [string, string]) => {
                         const type = title[0]
                         const items = ingredientItems ? ingredientItems.filter((item: IBurgerItem) => item.type === type) : []
 
                         return (
                             <div key={type}>
-                                <h2 className="text text_type_main-medium" ref={getRefHtmlElement(type)}>{title[1]}</h2>
+                                <InView root={containerRef.current} onChange={(inView, entry) => handleHeadingScroll(type, inView, entry)}>
+                                    <h2 className="text text_type_main-medium" ref={getRefHtmlElement(type)}>{title[1]}</h2>
+                                </InView>
 
-                                <IngredientsList items={items} />
+                                <IngredientsList items={items} toggleModal={handleModalToggle} />
                             </div>
                         )
                     })}

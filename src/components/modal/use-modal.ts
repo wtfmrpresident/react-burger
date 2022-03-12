@@ -3,6 +3,7 @@ import {useCallback, useEffect, useState} from "react";
 function useModal() {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const toggle = () => setIsOpen(!isOpen)
+
     const escapeHandler = useCallback((e: KeyboardEvent) => {
         if (e.key === 'Escape' && isOpen) {
             e.preventDefault()
