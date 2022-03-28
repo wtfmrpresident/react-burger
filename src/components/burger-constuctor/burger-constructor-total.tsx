@@ -10,12 +10,15 @@ import IBurgerItem from "../../interfaces/IBurgerItem";
 import {totalPriceSelector} from "../../services/total-price";
 import {createOrder} from "../../services/order";
 import {resetCart} from "../../services/cart";
+import {useNavigate} from "react-router-dom";
 
 export const BurgerConstructorTotal = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const totalPrice = useSelector(totalPriceSelector)
 
+    const accountState = useSelector((state: AppRootState) => state.account)
     const bunItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.bunItems)
     const ingredientItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.ingredientItems)
     const {orderNumber, request, failed} = useSelector((state: AppRootState) => state.order)
@@ -23,6 +26,10 @@ export const BurgerConstructorTotal = () => {
     const { isOpen, toggle } = useModal();
 
     const handleCreateOrderClick = () => {
+        if (!accountState.user) {
+            navigate('/login')
+        }
+
         const cartItems = bunItemsState.concat(ingredientItemsState)
         dispatch(createOrder(cartItems))
     }

@@ -1,6 +1,6 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import appHeaderStyles from "./app-header.module.css";
-import MenuItem from "./menu-item";
 import IMenuItem from "../../interfaces/IMenuItem";
 
 function Menu(props: { items: IMenuItem[]; }) {
@@ -10,7 +10,15 @@ function Menu(props: { items: IMenuItem[]; }) {
                 {props.items.map((menuItem, index) => {
                     return (
                         <li key={index}>
-                            <MenuItem item={menuItem} isActive={menuItem.text === 'Конструктор'} /> {/* пока оставлю костыликом, думаю, это исправится, когда будет роутинг */}
+                            <NavLink
+                                to={menuItem.link}
+                                className={({ isActive }) => {
+                                    return `${appHeaderStyles.menu_text} text text_type_main-default ${isActive ? appHeaderStyles.active : null}`;
+                                }}
+                            >
+                                {menuItem.icon}
+                                {menuItem.text}
+                            </NavLink>
                         </li>
                     )
                 })}

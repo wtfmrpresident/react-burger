@@ -1,6 +1,7 @@
 import {createSlice, Dispatch, PayloadAction, Slice} from "@reduxjs/toolkit";
 import IBurgerItem from "../interfaces/IBurgerItem";
 import {baseUrl, checkResponse} from "./api";
+import {getCookie} from "../utils/cookie";
 
 interface IOrderState {
     orderNumber: number | null,
@@ -61,7 +62,8 @@ export const createOrder = (cartItems: IBurgerItem[]) => async (dispatch: Dispat
         method: 'POST',
         body: JSON.stringify({"ingredients": postData}),
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + getCookie('token'),
         },
     })
         .then(checkResponse)
