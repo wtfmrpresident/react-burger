@@ -56,7 +56,7 @@ export function ProfilePage() {
     }
 
     return (
-        <>
+        <form onSubmit={handleSubmit}>
             <div className="mt-6">
                 <Input
                     type="text"
@@ -96,11 +96,11 @@ export function ProfilePage() {
             {
                 isDataChanged ? (
                     <div className="mt-6 mb">
-                        <Button onClick={handleSubmit} disabled={accountState.registerRequest}>Сохранить</Button>
+                        <Button htmlType="submit" disabled={accountState.registerRequest}>Сохранить</Button>
                         <Button type="secondary" onClick={onClickCancel} disabled={accountState.registerRequest}>Отмена</Button>
                     </div>
                 ) : null
             }
-        </>
+        </form>
     )
 }

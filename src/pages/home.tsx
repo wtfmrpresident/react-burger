@@ -3,20 +3,13 @@ import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import BurgerIngredients from "../components/burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../components/burger-constuctor/burger-constructor";
-import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {getItems, IIngredientItemsState} from "../services/ingredient-items";
+import React from "react";
+import { useSelector} from "react-redux";
+import {IIngredientItemsState} from "../services/getIngredients";
 import {AppRootState} from "../store";
 
 export function HomePage() {
-    const dispatch = useDispatch()
     const ingredients: IIngredientItemsState = useSelector((state: AppRootState) => state.ingredients)
-
-    useEffect(() => {
-        if (!ingredients.items.length) {
-            dispatch(getItems())
-        }
-    }, [dispatch, ingredients.items.length])
 
     return (
         <div className={homePageStyles.container}>

@@ -2,6 +2,7 @@ import React from 'react';
 import {Logo, BurgerIcon, ListIcon, ProfileIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import appHeaderStyles from './app-header.module.css';
 import Menu from "./menu";
+import {Link} from "react-router-dom";
 
 function AppHeader() {
     const leftMenu = [
@@ -32,7 +33,9 @@ function AppHeader() {
                     <div className={appHeaderStyles.menu_left}>
                         <Menu items={leftMenu} />
                     </div>
-                    <Logo />
+                    <Link to="/">
+                        <Logo />
+                    </Link>
                     <div className={appHeaderStyles.menu_right}>
                         <Menu items={rightMenu} />
                     </div>

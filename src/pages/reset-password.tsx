@@ -39,15 +39,17 @@ export function ResetPasswordPage() {
         <div className="container">
             <div className={`${resetPasswordPageStyles.main}`}>
                 <h2 className="text__center">Восстановление пароля</h2>
-                <div className="mt-6">
-                    <PasswordInput value={form.password} name="password" onChange={onChange} />
-                </div>
-                <div className="mt-6">
-                    <Input placeholder="Введите код из письма" value={form.token} name="token" onChange={onChange} />
-                </div>
-                <div className="mt-6 mb">
-                    <Button onClick={handleSubmit} disabled={forgotPasswordState.resetPasswordRequest}>Восстановить</Button>
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="mt-6">
+                        <PasswordInput value={form.password} name="password" onChange={onChange} />
+                    </div>
+                    <div className="mt-6">
+                        <Input placeholder="Введите код из письма" value={form.token} name="token" onChange={onChange} />
+                    </div>
+                    <div className="mt-6 mb">
+                        <Button htmlType="submit" disabled={forgotPasswordState.resetPasswordRequest}>Восстановить</Button>
+                    </div>
+                </form>
                 <p className="mt-20">Вспомнили пароль? <Link to="/register">Войти</Link></p>
             </div>
         </div>

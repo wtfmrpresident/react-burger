@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import {
     AccountPage,
@@ -15,8 +15,15 @@ import { RequireAuth } from "../RequireAuth";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import {AppLayout} from "../../pages/AppLayout";
+import {getCookie} from "../../utils/cookie";
+import {AppRootState, useAppDispatch} from "../../store";
+import {profile, refreshToken} from "../../services/account";
+import {ITokenData} from "../../utils/auth";
+import {useSelector} from "react-redux";
+import {getIngredients, IIngredientItemsState} from "../../services/getIngredients";
 
 function App() {
+    const dispatch = useAppDispatch()
     const location = useLocation()
     const navigate = useNavigate()
     const state = location.state as { backgroundLocation?: Location };
@@ -24,6 +31,32 @@ function App() {
     const handleToggleModal = () => {
         navigate(-1)
     }
+
+    const ingredients: IIngredientItemsState = useSelector((state: AppRootState) => state.ingredients)
+
+    useEffect(() => {
+        if (!ingredients.items.length) {
+            dispatch(getIngredients())
+        }
+    }, [dispatch, ingredients.items.length])
+
+    useEffect(
+        () => {
+            const token = getCookie('token')
+            if (token) {
+                dispatch(profile())
+                    .unwrap()
+                    .catch(() => {
+                        const refreshTokenValue = getCookie('refreshToken')
+                        if (refreshTokenValue) {
+                            const data: ITokenData = {token: refreshTokenValue}
+                            dispatch(refreshToken(data)).unwrap().then(() => {dispatch(profile())})
+                        }
+                    })
+            }
+        },
+        [dispatch]
+    )
 
     return (
         <>

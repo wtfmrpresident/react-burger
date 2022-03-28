@@ -1,5 +1,5 @@
 import {combineReducers} from "redux";
-import ingredientItemsReducer from "./ingredient-items";
+import ingredientItemsReducer from "./getIngredients";
 import cartItemsReducer from "./cart";
 import orderReducer from "./order";
 import accountReducer from "./account";

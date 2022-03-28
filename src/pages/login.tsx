@@ -33,15 +33,17 @@ export function LoginPage() {
         <div className="container">
             <div className={`${loginPageStyles.main}`}>
                 <h2 className="text__center">Вход</h2>
-                <div className="mt-6">
-                    <Input placeholder="Email" value={form.email} name="email" onChange={onChange} />
-                </div>
-                <div className="mt-6">
-                    <PasswordInput value={form.password} name="password" onChange={onChange} />
-                </div>
-                <div className="mt-6 mb">
-                    <Button onClick={handleSubmit} disabled={accountState.loginRequest}>Войти</Button>
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="mt-6">
+                        <Input placeholder="Email" value={form.email} name="email" onChange={onChange} />
+                    </div>
+                    <div className="mt-6">
+                        <PasswordInput value={form.password} name="password" onChange={onChange} />
+                    </div>
+                    <div className="mt-6 mb">
+                        <Button htmlType="submit" disabled={accountState.loginRequest}>Войти</Button>
+                    </div>
+                </form>
                 <p className="mt-20">Вы - новый пользователь? <Link to="/register">Зарегистрироваться</Link></p>
                 <p className="mt-4">Забыли пароль? <Link to="/forgot-password">Восстановить пароль</Link></p>
             </div>

@@ -1,14 +1,11 @@
-import React, {useEffect} from "react";
+import React from "react";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import ingredientDetailsStyles from "./ingredient-details.module.css"
 import {useLocation, useParams} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {AppRootState} from "../../store";
-import {getItems} from "../../services/ingredient-items";
 
 export default function IngredientDetails() {
-    const dispatch = useDispatch()
-
     const location = useLocation()
     const state = location.state as { backgroundLocation?: Location };
 
@@ -17,12 +14,6 @@ export default function IngredientDetails() {
     const ingredientsState: IBurgerItem[] = useSelector((state: AppRootState) => state.ingredients.items)
 
     const ingredient = ingredientsState.find((item: IBurgerItem) => item._id === id)
-
-    useEffect(() => {
-        if (!ingredientsState.length) {
-            dispatch(getItems())
-        }
-    }, [dispatch, ingredientsState.length])
 
     if (!ingredient) {
         return null
