@@ -1,12 +1,14 @@
-import React from "react";
 import modalOverlayStyles from "./modal-overlay.module.css"
+import React, {FunctionComponent} from "react";
 
-function Modal(props: {
-    hide: () => void,
-}) {
+interface IModalOverlay {
+    onBackdropClick: () => void
+}
+
+const ModalOverlay: FunctionComponent<IModalOverlay> = ({onBackdropClick}) => {
     return (
-        <div className={modalOverlayStyles.overlay} onClick={props.hide} />
+        <div className={modalOverlayStyles.overlay} onClick={onBackdropClick} />
     )
 }
 
-export default Modal
+export default ModalOverlay

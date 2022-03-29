@@ -37,7 +37,12 @@ function IngredientItem(props: { item: IBurgerItem }) {
 
     return (
         <>
-            <Link to={`/ingredients/${props.item._id}`} state={{backgroundLocation: location}} key={props.item._id} className={`${ingredientItemStyle.item} mb-10`}>
+            <Link
+                to={`/ingredients/${props.item._id}`}
+                state={{backgroundLocation: location}}
+                key={props.item._id}
+                className={`${ingredientItemStyle.item} mb-10`}
+            >
                 <div
                     style={{cursor:"pointer", opacity, transform}}
                     ref={ref}

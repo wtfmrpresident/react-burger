@@ -1,19 +1,18 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import useModal from "../modal/use-modal";
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import burgerConstructorTotalStyles from './burger-constructor-total.module.css'
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../../store";
+import {useSelector} from "react-redux";
+import {AppRootState, useAppDispatch} from "../../store";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import {totalPriceSelector} from "../../services/total-price";
-import {createOrder} from "../../services/order";
+import {createOrder, resetOrderNumber} from "../../services/order";
 import {resetCart} from "../../services/cart";
 import {useNavigate} from "react-router-dom";
 
 export const BurgerConstructorTotal = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
     const totalPrice = useSelector(totalPriceSelector)
@@ -23,20 +22,20 @@ export const BurgerConstructorTotal = () => {
     const ingredientItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.ingredientItems)
     const {orderNumber, request, failed} = useSelector((state: AppRootState) => state.order)
 
-    const { isOpen, toggle } = useModal();
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
 
     const handleCreateOrderClick = () => {
         if (!accountState.user) {
             navigate('/login')
         }
 
-        const cartItems = bunItemsState.concat(ingredientItemsState)
-        dispatch(createOrder(cartItems))
+        const items = bunItemsState.concat(ingredientItemsState)
+        dispatch(createOrder({items}))
     }
 
     useEffect(() => {
         if (orderNumber) {
-            toggle()
+            setIsModalVisible(true)
             // @ts-ignore
             dispatch(resetCart())
         }
@@ -44,10 +43,16 @@ export const BurgerConstructorTotal = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [orderNumber])
 
+    const onModalClose = () => {
+        setIsModalVisible(false)
+        // @ts-ignore
+        dispatch(resetOrderNumber())
+    }
+
     return (
         <>
             {orderNumber && (
-                <Modal isOpen={isOpen} hide={toggle}>
+                <Modal isModalVisible={isModalVisible} onClose={onModalClose}>
                     <OrderDetails orderNumber={orderNumber} hasError={failed} />
                 </Modal>
             )}

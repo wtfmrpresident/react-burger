@@ -1,41 +1,60 @@
-import React from "react";
-import {createPortal} from "react-dom";
-import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import modalStyles from "./modal.module.css"
+import React, {MouseEventHandler, useEffect} from "react";
 import ModalOverlay from "./modal-overlay";
+import {createPortal} from "react-dom";
+import modalStyles from "../modal/modal.module.css";
+import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+
+interface ModalProps {
+    isModalVisible?: boolean
+    onClose: () => void,
+    title?: string,
+    children: React.ReactNode
+}
+
+const stopPropagation: MouseEventHandler<HTMLDivElement> = e => {
+    e.persist();
+    e.stopPropagation();
+}
 
 const modalRoot = document.getElementById('modal');
 
-function Modal(props: {
-    isOpen: boolean,
-    hide: () => void,
-    title?: string,
-    children: React.ReactNode
-}) {
+const Modal: React.FC<ModalProps> = ({onClose, title, children, isModalVisible}) => {
+    useEffect(() => {
+        document.addEventListener<'keydown'>('keydown', onClose, false);
+
+        return () => {
+            document.removeEventListener<'keydown'>('keydown', onClose);
+        }
+    }, [onClose])
+
+    if (typeof isModalVisible !== "undefined" && !isModalVisible) {
+        return null
+    }
+
     const modal = (
         <>
-            <ModalOverlay hide={props.hide} />
-            <div className={modalStyles.modal}>
-                <div className={`${modalStyles.header} mt-10 ml-10 mr-10`}>
-                    <div className={`${modalStyles.title} text text_type_main-large`}>
-                        {props.title}
+            <ModalOverlay onBackdropClick={onClose} />
+            <div onClick={stopPropagation}>
+                <div className={modalStyles.modal}>
+                    <div className={`${modalStyles.header} mt-10 ml-10 mr-10`}>
+                        <div className={`${modalStyles.title} text text_type_main-large`}>
+                            {title && title}
+                        </div>
+                        <div className={modalStyles.close}>
+                            <CloseIcon type="primary" onClick={onClose} />
+                        </div>
                     </div>
-                    <div className={modalStyles.close}>
-                        <CloseIcon type="primary" onClick={props.hide} />
-                    </div>
-                </div>
-                <div className={`${modalStyles.content_container}`}>
-                    <div className={`${modalStyles.content}`}>
-                        {props.children}
+                    <div className={`${modalStyles.content_container}`}>
+                        <div className={`${modalStyles.content}`}>
+                            {children}
+                        </div>
                     </div>
                 </div>
             </div>
         </>
     )
 
-    return (
-        props.isOpen && modalRoot ? createPortal(modal, modalRoot) : null
-    )
+    return modalRoot ? createPortal(modal, modalRoot) : null
 }
 
 export default Modal

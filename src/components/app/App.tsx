@@ -83,7 +83,7 @@ function App() {
             {state?.backgroundLocation && (
                 <Routes>
                     <Route path="/ingredients/:id" element={
-                        <Modal isOpen={true} hide={handleToggleModal}>
+                        <Modal onClose={handleToggleModal}>
                             <IngredientDetails />
                         </Modal>
                     } />
