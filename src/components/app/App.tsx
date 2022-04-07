@@ -1,41 +1,94 @@
 import React, {useEffect} from 'react';
-import AppHeader from "../app-header/app-header";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import BurgerConstructor from "../burger-constuctor/burger-constructor";
-import appStyles from  './app.module.css';
-import {useDispatch, useSelector} from "react-redux";
-import {IIngredientItemsState, getItems} from "../../services/ingredient-items";
-import {AppRootState} from "../../store";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import {
+    AccountPage,
+    ForgotPasswordPage,
+    HomePage,
+    LoginPage,
+    NotFoundPage,
+    ProfileOrdersPage,
+    ProfilePage,
+    RegisterPage,
+    ResetPasswordPage
+} from "../../pages";
+import { RequireAuth } from "../RequireAuth";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import {AppLayout} from "../../pages/AppLayout";
+import {getCookie} from "../../utils/cookie";
+import {AppRootState, useAppDispatch} from "../../store";
+import {profile, refreshToken} from "../../services/account";
+import {ITokenData} from "../../utils/auth";
+import {useSelector} from "react-redux";
+import {getIngredients, IIngredientItemsState} from "../../services/getIngredients";
 
 function App() {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
+    const location = useLocation()
+    const navigate = useNavigate()
+    const state = location.state as { backgroundLocation?: Location };
+
+    const handleToggleModal = () => {
+        navigate(-1)
+    }
+
     const ingredients: IIngredientItemsState = useSelector((state: AppRootState) => state.ingredients)
 
     useEffect(() => {
         if (!ingredients.items.length) {
-            dispatch(getItems())
+            dispatch(getIngredients())
         }
     }, [dispatch, ingredients.items.length])
 
+    useEffect(
+        () => {
+            const token = getCookie('token')
+            if (token) {
+                dispatch(profile())
+                    .unwrap()
+                    .catch(() => {
+                        const refreshTokenValue = getCookie('refreshToken')
+                        if (refreshTokenValue) {
+                            const data: ITokenData = {token: refreshTokenValue}
+                            dispatch(refreshToken(data)).unwrap().then(() => {dispatch(profile())})
+                        }
+                    })
+            }
+        },
+        [dispatch]
+    )
+
     return (
         <>
-            <AppHeader />
-            <div className={appStyles.container}>
-                <main className={appStyles.main}>
-                    <DndProvider backend={HTML5Backend}>
-                        <section className={`${appStyles.section} ${appStyles.limitedHeight} mb-10 mr-10`}>
-                            {ingredients.items.length > 0 && <BurgerIngredients />}
-                            {ingredients.request && !ingredients.failed && <p className="">Рагружаем контейнер с ингридиентами...</p> }
-                            {ingredients.failed && <p className="">При разгрузке контейнера с ингридиентами произошла нелепая ошибка. Исправляем...</p> }
-                        </section>
-                        <section className={`${appStyles.section} pt-25`}>
-                            <BurgerConstructor />
-                        </section>
-                    </DndProvider>
-                </main>
-            </div>
+            <Routes location={state?.backgroundLocation || location}>
+                <Route path="/" element={<AppLayout />}>
+                    <Route index element={<HomePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/profile/*" element={
+                        <RequireAuth>
+                            <AccountPage />
+                        </RequireAuth>
+                    }>
+                        <Route path="update" element={<ProfilePage />} />
+                        <Route path="orders" element={<ProfileOrdersPage />} />
+                    </Route>
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route path="/ingredients/:id" element={<IngredientDetails />} />
+                    <Route path="*" element={<NotFoundPage />} />
+                </Route>
+            </Routes>
+
+            {state?.backgroundLocation && (
+                <Routes>
+                    <Route path="/ingredients/:id" element={
+                        <Modal onClose={handleToggleModal}>
+                            <IngredientDetails />
+                        </Modal>
+                    } />
+                </Routes>
+            )}
         </>
     );
 }

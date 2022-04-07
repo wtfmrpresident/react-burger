@@ -23,16 +23,3 @@
     align-content: center;
     justify-content: space-between;
 }
-
-.content_container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.content {
-    display: flex;
-    width: 520px;
-    justify-content: center;
-    flex-direction: column;
-}

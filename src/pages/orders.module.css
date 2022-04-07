@@ -1,0 +1,38 @@
+.container {
+    width: 1180px;
+    margin: 0 auto;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin-top: 120px;
+    padding: 0;
+    flex-direction: row;
+}
+
+.section_menu {
+    width: 320px;
+}
+
+.section_content {
+    width: 480px;
+}
+
+.menu_list {
+    list-style: none;
+}
+
+.menu_list_item {
+    height: 64px;
+    line-height: 64px;
+}
+
+.menu_list_item a {
+    color: #8585AD;
+}
+
+.menu_list_item a.menu_list_item_active {
+    color: #ffffff;
+}

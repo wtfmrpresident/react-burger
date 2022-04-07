@@ -1,0 +1,20 @@
+.container {
+    width: 1180px;
+    margin: 0 auto;
+}
+
+.main {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.img {
+    max-width: 340px;
+    height: auto;
+}
+
+.error_text {
+    margin: 0;
+    font-size: 112px;
+}

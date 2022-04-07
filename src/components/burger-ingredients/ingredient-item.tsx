@@ -1,12 +1,15 @@
 import React from "react";
-import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientItemStyle from './ingredient-item.module.css';
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import {useSelector} from "react-redux";
 import {AppRootState} from "../../store";
 import {useDrag} from "react-dnd";
+import {Link, useLocation} from "react-router-dom";
 
-function IngredientItem(props: { item: IBurgerItem, toggleModal: (item: IBurgerItem) => void}) {
+function IngredientItem(props: { item: IBurgerItem }) {
+    const location = useLocation()
+
     const bunItemsState = useSelector((state: AppRootState) => state.cart.bunItems)
     const ingredientItemsState = useSelector((state: AppRootState) => state.cart.ingredientItems)
 
@@ -34,26 +37,31 @@ function IngredientItem(props: { item: IBurgerItem, toggleModal: (item: IBurgerI
 
     return (
         <>
-            <div
+            <Link
+                to={`/ingredients/${props.item._id}`}
+                state={{backgroundLocation: location}}
+                key={props.item._id}
                 className={`${ingredientItemStyle.item} mb-10`}
-                style={{cursor:"pointer", opacity, transform}}
-                onClick={() => props.toggleModal(props.item)}
-                ref={ref}
             >
-                {cartItemQuantity ? (
-                    <span className={`${ingredientItemStyle.badge} text text_type_digits-default`}>{cartItemQuantity}</span>
-                ) : null}
-                <div className={ingredientItemStyle.image}>
-                    <img src={props.item.image} alt={props.item.name}/>
+                <div
+                    style={{cursor:"pointer", opacity, transform}}
+                    ref={ref}
+                >
+                    {cartItemQuantity ? (
+                        <Counter count={cartItemQuantity} />
+                    ) : null}
+                    <div className={ingredientItemStyle.image}>
+                        <img src={props.item.image} alt={props.item.name}/>
+                    </div>
+                    <p className={`${ingredientItemStyle.paragraph} text text_type_digits-default pt-1 pb-1`}>
+                        <span className="mr-2">{props.item.price}</span>
+                        <CurrencyIcon type="primary" />
+                    </p>
+                    <p className={`${ingredientItemStyle.paragraph} text text_type_main-default pb-5`}>
+                        {props.item.name}
+                    </p>
                 </div>
-                <p className={`${ingredientItemStyle.paragraph} text text_type_digits-default pt-1 pb-1`}>
-                    <span className="mr-2">{props.item.price}</span>
-                    <CurrencyIcon type="primary" />
-                </p>
-                <p className={`${ingredientItemStyle.paragraph} text text_type_main-default pb-5`}>
-                    {props.item.name}
-                </p>
-            </div>
+            </Link>
         </>
     )
 }

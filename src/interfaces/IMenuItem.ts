@@ -2,7 +2,8 @@ import {TIconProps} from "@ya.praktikum/react-developer-burger-ui-components/dis
 
 interface IMenuItem {
     icon: TIconProps,
-    text: string
+    text: string,
+    link: string,
 }
 
 export default IMenuItem

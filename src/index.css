@@ -15,3 +15,20 @@ body {
 .text__center {
   text-align: center;
 }
+
+a {
+  color: #4C4CFF;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #4C4CFF;
+}
+
+.container {
+  width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
