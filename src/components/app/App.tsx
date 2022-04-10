@@ -22,6 +22,12 @@ import {ITokenData} from "../../utils/auth";
 import {useSelector} from "react-redux";
 import {getIngredients, IIngredientItemsState} from "../../services/getIngredients";
 
+export type TLocationState = {
+    state?: {
+        backgroundLocation?: Location
+    }
+}
+
 function App() {
     const dispatch = useAppDispatch()
     const location = useLocation()

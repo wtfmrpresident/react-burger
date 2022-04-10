@@ -9,7 +9,7 @@ export default function IngredientDetails() {
     const location = useLocation()
     const state = location.state as { backgroundLocation?: Location };
 
-    const { id } = useParams()
+    const { id } = useParams<string>()
 
     const ingredientsState: IBurgerItem[] = useSelector((state: AppRootState) => state.ingredients.items)
 

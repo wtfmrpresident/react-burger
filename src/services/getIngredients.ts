@@ -21,15 +21,33 @@ export const getIngredients = createAsyncThunk(
     }
 )
 
-export const ingredientItemsSlice: Slice = createSlice({
+type TIngredientItemsActions = {
+    request: (state: IIngredientItemsState) => void;
+    success: (state: IIngredientItemsState) => void;
+    failed: (state: IIngredientItemsState) => void;
+}
+
+export const ingredientItemsSlice: Slice<IIngredientItemsState, TIngredientItemsActions> = createSlice({
     name: 'ingredientItems',
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        request: (state: IIngredientItemsState) => {
+            state.request = true
+            state.failed = false
+        },
+        success: (state: IIngredientItemsState) => {
+            state.request = false
+            state.failed = false
+        },
+        failed: (state: IIngredientItemsState) => {
+            state.request = false
+            state.failed = true
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getIngredients.pending, (state: IIngredientItemsState) => {
-                state.request = true
-                state.failed = false
+                ingredientItemsSlice.caseReducers.request(state)
             })
             .addCase(getIngredients.fulfilled, (state: IIngredientItemsState, action: PayloadAction<void | IIngredientsResponse>) => {
                 if (action.payload) {
@@ -41,14 +59,12 @@ export const ingredientItemsSlice: Slice = createSlice({
                     })
                 }
 
-                state.request = false
-                state.failed = false
+                ingredientItemsSlice.caseReducers.success(state)
             })
             .addCase(getIngredients.rejected, (state: IIngredientItemsState) => {
-                state.request = false
-                state.failed = true
+                ingredientItemsSlice.caseReducers.failed(state)
             })
     }
 })
 
-export default ingredientItemsSlice.reducer
+export default ingredientItemsSlice

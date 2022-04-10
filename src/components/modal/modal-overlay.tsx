@@ -1,11 +1,11 @@
 import modalOverlayStyles from "./modal-overlay.module.css"
-import React, {FunctionComponent} from "react";
+import React, { FC } from "react";
 
 interface IModalOverlay {
     onBackdropClick: () => void
 }
 
-const ModalOverlay: FunctionComponent<IModalOverlay> = ({onBackdropClick}) => {
+const ModalOverlay: FC<IModalOverlay> = ({onBackdropClick}) => {
     return (
         <div className={modalOverlayStyles.overlay} onClick={onBackdropClick} />
     )

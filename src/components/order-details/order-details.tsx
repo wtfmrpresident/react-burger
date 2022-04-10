@@ -1,12 +1,12 @@
 import orderDetailsStyles from "./order-details.module.css"
 import {CheckMarkIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 
-interface IProps {
-    orderNumber: number | null
-    hasError: boolean
+type TOrderDetailsProps = {
+    orderNumber: number | null;
+    hasError: boolean;
 }
 
-export default function orderDetails(props: IProps) {
+export default function orderDetails(props: TOrderDetailsProps) {
     return (
         <>
             <p className={`${orderDetailsStyles.order_id} text__center text text_type_digits-large mb-8`}>

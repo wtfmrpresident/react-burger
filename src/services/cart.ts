@@ -2,7 +2,7 @@ import IBurgerItem from "../interfaces/IBurgerItem";
 import {createSlice, PayloadAction, Slice} from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from 'uuid';
 
-interface ICartItemsState {
+export interface ICartItemsState {
     bunItems: IBurgerItem[]
     ingredientItems: IBurgerItem[]
     dragIndex?: number,
@@ -49,20 +49,17 @@ function replacedBun(cartItems: IBurgerItem[], item: IBurgerItem): IBurgerItem[]
     return cart
 }
 
-export const cartSlice: Slice = createSlice({
+export const cartSlice: Slice<ICartItemsState> = createSlice({
     name: 'cartItems',
-    initialState: initialState,
+    initialState,
     reducers: {
         addToCart: (state: ICartItemsState, action: PayloadAction<IBurgerItem>) => {
             const ingredient = {...action.payload}
             if (ingredient) {
                 if (ingredient.type === 'bun') {
-                    return {
-                        ...state,
-                        bunItems: replacedBun(state.ingredientItems, ingredient)
-                    }
+                    state.bunItems = replacedBun(state.ingredientItems, ingredient)
+                    return
                 }
-
 
                 state.ingredientItems.push({...ingredient, uuid: uuidv4()})
             }
@@ -81,11 +78,8 @@ export const cartSlice: Slice = createSlice({
         },
 
         resetCart: (state: ICartItemsState) => {
-            return {
-                ...state,
-                bunItems: [],
-                ingredientItems: []
-            }
+            state.bunItems = []
+            state.ingredientItems = []
         },
 
         moveIngredient: (state: ICartItemsState, action: PayloadAction<IMoveIngredientAction>) => {
@@ -102,4 +96,4 @@ export const cartSlice: Slice = createSlice({
 
 export const {addToCart, removeFromCart, moveIngredient, resetCart} = cartSlice.actions
 
-export default cartSlice.reducer
+export default cartSlice
