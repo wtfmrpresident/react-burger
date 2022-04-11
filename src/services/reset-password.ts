@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import resetPasswordService, {
     IForgotPasswordData,
     IResetPasswordData,
@@ -28,7 +28,7 @@ export const resetPassword = createAsyncThunk(
     }
 )
 
-const initialState = {
+const initialState: IResetPasswordState = {
     forgotPasswordRequest: false,
     forgotPasswordFailed: false,
     forgotPasswordEmailRequest: null,
@@ -37,7 +37,11 @@ const initialState = {
     resetPasswordFailed: false,
 }
 
-const resetPasswordSlice = createSlice({
+type TResetPasswordActions = {
+    setPasswordEmailRequest: (state: IResetPasswordState, action: PayloadAction<IForgotPasswordData>) => void
+}
+
+const resetPasswordSlice: Slice<IResetPasswordState, TResetPasswordActions> = createSlice({
     name: "reset-password",
     initialState,
     reducers: {
@@ -78,4 +82,4 @@ const resetPasswordSlice = createSlice({
 
 export const { setPasswordEmailRequest } = resetPasswordSlice.actions
 
-export default resetPasswordSlice.reducer
+export default resetPasswordSlice

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { FC, useState } from "react";
 import Tabs from "./tabs";
 import IngredientsList from "./ingredients-list";
 import IBurgerItem from "../../interfaces/IBurgerItem";
@@ -8,22 +8,32 @@ import {useSelector} from "react-redux";
 import {AppRootState} from "../../store";
 import {InView} from "react-intersection-observer";
 
-const BurgerIngredients = () => {
+type TBurgerIngredientsPositionState = {
+    type: string;
+    entryTop: number;
+    inView: boolean
+}
+
+export type TSetSelectedTab = {
+    (value: string): void
+}
+
+const BurgerIngredients: FC = () => {
     const ingredientItems = useSelector((state: AppRootState) => state.ingredients.items)
 
-    const containerRef = React.useRef<HTMLDivElement>(null)
-    const bunRef = React.useRef<HTMLHeadingElement>(null)
-    const sauceRef = React.useRef<HTMLHeadingElement>(null)
-    const mainRef = React.useRef<HTMLHeadingElement>(null)
+    const containerRef = React.useRef<HTMLDivElement | null>(null)
+    const bunRef = React.useRef<HTMLHeadingElement | null>(null)
+    const sauceRef = React.useRef<HTMLHeadingElement | null>(null)
+    const mainRef = React.useRef<HTMLHeadingElement | null>(null)
 
-    const [selectedTab, setSelectedTab] = useState("bun");
-    const [headingPositions, setHeadingPositions] = useState([
+    const [selectedTab, setSelectedTab] = useState<string>("bun");
+    const [headingPositions, setHeadingPositions] = useState<TBurgerIngredientsPositionState[]>([
         {type: "bun", entryTop: 0, inView: false},
         {type: "sauce", entryTop: 0, inView: false},
         {type: "main", entryTop: 0, inView: false},
     ])
 
-    const handleChangeTab = (value: string) => {
+    const handleChangeTab: TSetSelectedTab = (value: string) => {
         const refHtmlElement = getRefHtmlElement(value)
         if (refHtmlElement.current) {
             refHtmlElement.current.scrollIntoView({behavior: "smooth"})

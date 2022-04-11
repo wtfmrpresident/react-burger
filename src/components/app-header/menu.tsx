@@ -1,13 +1,17 @@
-import React from "react";
+import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
 import appHeaderStyles from "./app-header.module.css";
 import IMenuItem from "../../interfaces/IMenuItem";
 
-function Menu(props: { items: IMenuItem[]; }) {
+type TMenu = {
+    items: IMenuItem[];
+}
+
+const Menu: FC<TMenu> = ({ items }) => {
     return (
         <>
             <ul className={appHeaderStyles.menu}>
-                {props.items.map((menuItem, index) => {
+                {items.map((menuItem, index) => {
                     return (
                         <li key={index}>
                             <NavLink
