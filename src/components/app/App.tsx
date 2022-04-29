@@ -16,11 +16,13 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import {AppLayout} from "../../pages/AppLayout";
 import {getCookie} from "../../utils/cookie";
-import {AppRootState, useAppDispatch} from "../../store";
+import {AppRootState} from "../../store";
 import {profile, refreshToken} from "../../services/account";
 import {ITokenData} from "../../utils/auth";
 import {useSelector} from "react-redux";
 import {getIngredients, IIngredientItemsState} from "../../services/getIngredients";
+import Feed from "../../pages/feed";
+import { useAppDispatch } from "../../types/hooks";
 
 export type TLocationState = {
     state?: {
@@ -70,6 +72,7 @@ function App() {
                 <Route path="/" element={<AppLayout />}>
                     <Route index element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/feed" element={<Feed />} />
                     <Route path="/profile/*" element={
                         <RequireAuth>
                             <AccountPage />

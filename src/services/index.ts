@@ -4,6 +4,7 @@ import cartItemsSlice from "./cart";
 import orderSlice from "./order";
 import accountSlice from "./account";
 import resetPasswordSlice from "./reset-password";
+import orderSocketSlice from "./order-socket";
 
 export const rootReducer = combineReducers({
     ingredients: ingredientItemsSlice.reducer,
@@ -11,4 +12,5 @@ export const rootReducer = combineReducers({
     order: orderSlice.reducer,
     account: accountSlice.reducer,
     resetPassword: resetPasswordSlice.reducer,
+    orderSocket: orderSocketSlice.reducer,
 })

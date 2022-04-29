@@ -2,10 +2,11 @@ import { ChangeEvent, SyntheticEvent, useState } from "react";
 import resetPasswordPageStyles from "./forgot-password.module.css";
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import {AppRootState, useAppDispatch } from "../store";
+import { AppRootState } from "../store";
 import { useSelector } from "react-redux";
 import { ILocationState } from "../interfaces/ILocationState";
 import { resetPassword } from "../services/reset-password";
+import { useAppDispatch } from "../types/hooks";
 
 export function ResetPasswordPage() {
     const dispatch = useAppDispatch()

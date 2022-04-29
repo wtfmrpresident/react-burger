@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 584px;
+    height: 214px;
+    border-radius: 40px;
+    padding: 24px;
+    background: #1C1C21;
+}
+
+.feed_item_header {
+    display: flex;
+}
+
+.feed_item_order_number {
+
+}
+
+.feed_item_order_created_datetime {
+
+}
