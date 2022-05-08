@@ -26,7 +26,7 @@ export const socketMiddleware = (): Middleware => {
                 };
 
                 socket.onerror = event => {
-                    dispatch(orderSocketSlice.actions.onError(event))
+                    dispatch(orderSocketSlice.actions.onError())
                 };
 
                 socket.onmessage = event => {
@@ -36,7 +36,7 @@ export const socketMiddleware = (): Middleware => {
                 };
 
                 socket.onclose = event => {
-                    dispatch(orderSocketSlice.actions.onClose(event))
+                    dispatch(orderSocketSlice.actions.onClose())
                 };
 
                 if (type === orderSocketSlice.actions.onOpen.type) {

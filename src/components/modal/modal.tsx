@@ -37,14 +37,14 @@ const Modal: React.FC<ModalProps> = ({onClose, title, children, isModalVisible})
             <div onClick={stopPropagation}>
                 <div className={modalStyles.modal}>
                     <div className={`${modalStyles.header} mt-10 ml-10 mr-10`}>
-                        <div className={`${modalStyles.title} text text_type_main-large`}>
+                        <div className="text text_type_main-large">
                             {title && title}
                         </div>
                         <div className={modalStyles.close}>
                             <CloseIcon type="primary" onClick={onClose} />
                         </div>
                     </div>
-                    <div className={`${modalStyles.content_container}`}>
+                    <div className="content_container">
                         <div className={`${modalStyles.content}`}>
                             {children}
                         </div>

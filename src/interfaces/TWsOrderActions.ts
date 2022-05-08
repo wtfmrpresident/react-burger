@@ -6,6 +6,7 @@ export type TWsOrder = {
     _id: string;
     status: "created" | "pending" | "done";
     number: number;
+    name: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -29,7 +30,7 @@ export type TWsOrderActions = {
     wsInit: (state: TWsOrderState, action: PayloadAction<TWsInitPayload>) => void,
     wsSendMessage: (state: TWsOrderState, action: PayloadAction<TWsOrderState>) => void,
     onOpen: (state: TWsOrderState) => void,
-    onClose: (state: TWsOrderState, action: PayloadAction<CloseEvent>) => void,
-    onError: (state: TWsOrderState, action: PayloadAction<Event>) => void,
+    onClose: (state: TWsOrderState) => void,
+    onError: (state: TWsOrderState) => void,
     onMessage: (state: TWsOrderState, action: PayloadAction<TWsOrderState>) => void
 }

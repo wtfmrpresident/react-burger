@@ -20,9 +20,11 @@ import {AppRootState} from "../../store";
 import {profile, refreshToken} from "../../services/account";
 import {ITokenData} from "../../utils/auth";
 import {useSelector} from "react-redux";
-import {getIngredients, IIngredientItemsState} from "../../services/getIngredients";
+import {getIngredients, IIngredientItemsState} from "../../services/get-ingredients";
 import Feed from "../../pages/feed";
 import { useAppDispatch } from "../../types/hooks";
+import FeedDetails from "../feed-item/feed-details";
+import FeedDetail from "../../pages/feed-detail";
 
 export type TLocationState = {
     state?: {
@@ -73,6 +75,7 @@ function App() {
                     <Route index element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/feed" element={<Feed />} />
+                    <Route path="/feed/:id" element={<FeedDetail />} />
                     <Route path="/profile/*" element={
                         <RequireAuth>
                             <AccountPage />
@@ -94,6 +97,11 @@ function App() {
                     <Route path="/ingredients/:id" element={
                         <Modal onClose={handleToggleModal}>
                             <IngredientDetails />
+                        </Modal>
+                    } />
+                    <Route path="/feed/:id" element={
+                        <Modal onClose={handleToggleModal}>
+                            <FeedDetails />
                         </Modal>
                     } />
                 </Routes>

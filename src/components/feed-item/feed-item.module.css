@@ -10,13 +10,39 @@
 }
 
 .feed_item_header {
+    width: 100%;
     display: flex;
-}
-
-.feed_item_order_number {
-
+    justify-content: space-between;
 }
 
 .feed_item_order_created_datetime {
+    color: #8585AD;
+}
 
+.feed_item_footer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.price {
+    display: flex;
+    align-items: center;
+}
+
+.feed_item_footer_ingredients {
+    width: 436px;
+    display: inline-flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.feed_item_link {
+    color: #ffffff;
+}
+
+.feed_item_link:hover,
+.feed_item_link:focus {
+    color: inherit;
 }

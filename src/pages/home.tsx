@@ -5,7 +5,7 @@ import BurgerIngredients from "../components/burger-ingredients/burger-ingredien
 import BurgerConstructor from "../components/burger-constuctor/burger-constructor";
 import React from "react";
 import { useSelector} from "react-redux";
-import {IIngredientItemsState} from "../services/getIngredients";
+import {IIngredientItemsState} from "../services/get-ingredients";
 import {AppRootState} from "../store";
 
 export function HomePage() {

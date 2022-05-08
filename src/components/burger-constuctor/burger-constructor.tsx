@@ -14,8 +14,8 @@ function BurgerConstructor() {
     const bunItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.bunItems)
     const ingredientItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.ingredientItems)
 
-    const bunTop = bunItemsState ? bunItemsState.find((cartItem: IBurgerItem) => cartItem.subtype === 'top') : null
-    const bunBottom = bunItemsState ? bunItemsState.find((cartItem: IBurgerItem) => cartItem.subtype === 'bottom') : null
+    const bunTop = bunItemsState ? bunItemsState.find((cartItem) => cartItem.subtype === 'top') : null
+    const bunBottom = bunItemsState ? bunItemsState.find((cartItem) => cartItem.subtype === 'bottom') : null
 
     const [{ingredientIsHover}, ingredientDropTarget] = useDrop({
         accept: ['bun', 'ingredient'],

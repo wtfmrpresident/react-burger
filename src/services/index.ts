@@ -1,5 +1,5 @@
 import {combineReducers} from "@reduxjs/toolkit";
-import ingredientItemsSlice from "./getIngredients";
+import ingredientItemsSlice from "./get-ingredients";
 import cartItemsSlice from "./cart";
 import orderSlice from "./order";
 import accountSlice from "./account";

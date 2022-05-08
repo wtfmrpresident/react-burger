@@ -22,9 +22,7 @@ export default function IngredientDetails() {
     return (
         <div className={ingredientDetailsStyles.content_container} style={!state?.backgroundLocation ? {marginTop: 120} : {}}>
             <div className={ingredientDetailsStyles.content}>
-                <div className={ingredientDetailsStyles.img_container}>
-                    <img src={ingredient.image_large} alt={ingredient.name} />
-                </div>
+                <img src={ingredient.image_large} alt={ingredient.name} />
 
                 <p className="text__center mt-4 mb-8 text text_type_main-medium">
                     {ingredient.name}
