@@ -3,9 +3,8 @@ import Tabs from "./tabs";
 import IngredientsList from "./ingredients-list";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import ITitles from "../../interfaces/ITitles";
-import {useSelector} from "react-redux";
-import {AppRootState} from "../../store";
 import {InView} from "react-intersection-observer";
+import { useAppSelector } from "../../types/hooks";
 
 type TBurgerIngredientsPositionState = {
     type: string;
@@ -18,7 +17,7 @@ export type TSetSelectedTab = {
 }
 
 const BurgerIngredients: FC = () => {
-    const ingredientItems = useSelector((state: AppRootState) => state.ingredients.items)
+    const ingredientItems = useAppSelector(state => state.ingredients.items)
 
     const containerRef = React.useRef<HTMLDivElement | null>(null)
     const bunRef = React.useRef<HTMLHeadingElement | null>(null)

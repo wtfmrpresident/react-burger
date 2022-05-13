@@ -1,27 +1,25 @@
-import React, {useRef} from "react";
-import {DragIcon, ConstructorElement} from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { useRef } from "react";
+import { DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import IBurgerItem from "../../interfaces/IBurgerItem";
-import {useDispatch} from "react-redux";
-import {removeFromCart, moveIngredient} from "../../services/cart";
-import {useDrag, useDrop} from "react-dnd";
+import { removeFromCart, moveIngredient } from "../../services/cart";
+import { useDrag, useDrop } from "react-dnd";
 import type { XYCoord, Identifier } from 'dnd-core';
 import burgerConstructorItemStyles from './burger-constructor-item.module.css'
+import { useAppDispatch } from "../../types/hooks";
 
 interface ISortableIngredient {
     item: IBurgerItem,
     index: number
 }
 
-function BurgerConstructorItem(props: {item: IBurgerItem, index?: number, isDrugEnabled: boolean}) {
-    const dispatch = useDispatch()
+function BurgerConstructorItem(props: { item: IBurgerItem, index?: number, isDrugEnabled: boolean }) {
+    const dispatch = useAppDispatch()
 
     const ref = useRef<HTMLDivElement>(null)
 
-    const [{handlerId}, drop] = useDrop<
-            ISortableIngredient,
-            void,
-            { handlerId: Identifier | null }
-        >({
+    const [{handlerId}, drop] = useDrop<ISortableIngredient,
+        void,
+        { handlerId: Identifier | null }>({
         accept: 'ingredientsSort',
         collect: (monitor) => {
             return {
@@ -68,7 +66,7 @@ function BurgerConstructorItem(props: {item: IBurgerItem, index?: number, isDrug
         },
     })
 
-    const [{ isDragging }, drag] = useDrag({
+    const [{isDragging}, drag] = useDrag({
         type: 'ingredientsSort',
         item: () => {
             return {
@@ -87,7 +85,8 @@ function BurgerConstructorItem(props: {item: IBurgerItem, index?: number, isDrug
 
     const opacity = isDragging ? 0 : 1;
     return (
-        <div ref={ref} className={`${burgerConstructorItemStyles.container} mb-4 mr-4`} style={{opacity}} data-handler-id={handlerId}>
+        <div ref={ref} className={`${burgerConstructorItemStyles.container} mb-4 mr-4`} style={{opacity}}
+             data-handler-id={handlerId}>
             <div className={burgerConstructorItemStyles.drag_container}>
                 {props.isDrugEnabled && <DragIcon type="primary"/>}
             </div>

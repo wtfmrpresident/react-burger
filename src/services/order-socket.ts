@@ -1,6 +1,16 @@
 import { createSlice, Slice } from "@reduxjs/toolkit";
 import { TWsOrderActions, TWsOrderState } from "../interfaces/TWsOrderActions";
 
+export const WS_ORDER_ACTIONS = {
+    wsInit: "ws-order/wsInit",
+    wsSendMessage: "ws-order/sendMessage",
+    wsClose: "ws-order/close",
+    onOpen: "ws-order/onOpen",
+    onClose: "ws-order/onClose",
+    onError: "ws-order/onError",
+    onMessage: "ws-order/onMessage",
+};
+
 const initialState: TWsOrderState = {
     isWsConnected: false,
 

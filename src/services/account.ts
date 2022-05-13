@@ -100,10 +100,7 @@ export const profile = createAsyncThunk<
 
 export const profileUpdate = createAsyncThunk<
     void | IProfileResponse,
-    IRegisterData,
-    {
-        state: TAccountState;
-    }
+    IRegisterData
     >(
     'auth/profileUpdate',
     async (data: IRegisterData): Promise<void | IProfileResponse> => {

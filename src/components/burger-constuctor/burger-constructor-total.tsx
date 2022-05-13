@@ -3,25 +3,22 @@ import { Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-co
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import burgerConstructorTotalStyles from './burger-constructor-total.module.css'
-import { useSelector } from "react-redux";
-import { AppRootState } from "../../store";
-import IBurgerItem from "../../interfaces/IBurgerItem";
 import { totalPriceSelector } from "../../services/total-price";
 import { createOrder, resetOrderNumber } from "../../services/order";
 import { resetCart } from "../../services/cart";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../types/hooks";
+import { useAppDispatch, useAppSelector } from "../../types/hooks";
 
 export const BurgerConstructorTotal = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    const totalPrice = useSelector(totalPriceSelector)
+    const totalPrice = useAppSelector(totalPriceSelector)
 
-    const accountState = useSelector((state: AppRootState) => state.account)
-    const bunItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.bunItems)
-    const ingredientItemsState: IBurgerItem[] = useSelector((state: AppRootState) => state.cart.ingredientItems)
-    const {orderNumber, request, failed} = useSelector((state: AppRootState) => state.order)
+    const accountState = useAppSelector(state => state.account)
+    const bunItemsState = useAppSelector(state => state.cart.bunItems)
+    const ingredientItemsState = useAppSelector(state => state.cart.ingredientItems)
+    const {orderNumber, request, failed} = useAppSelector(state => state.order)
 
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
 

@@ -4,7 +4,7 @@ import orderSocketSlice from "../services/order-socket";
 import { TWsOrder } from "../interfaces/TWsOrderActions";
 import { useAppDispatch, useAppSelector } from "../types/hooks";
 import FeedItem from "../components/feed-item/feed-item";
-import {wsUrl} from "../services/api";
+import { wsUrl } from "../services/api";
 
 const Feed: FC = () => {
     const dispatch = useAppDispatch()
@@ -39,7 +39,7 @@ const Feed: FC = () => {
 
                     <div className="scroll">
                         {orders.map((orderItem: TWsOrder) => {
-                            return (<FeedItem key={orderItem._id} order={orderItem} isShowStatusAllowed={false} />)
+                            return (<FeedItem key={orderItem._id} order={orderItem} isShowStatusAllowed={false}/>)
                         })}
                     </div>
                 </section>
@@ -50,7 +50,8 @@ const Feed: FC = () => {
                             <ul className={`${feedStyles.order_statistics_list} ${feedStyles.done} list-unstyled `}>
                                 {
                                     ordersDone.map(order => {
-                                        return <li className="mb-2 text text_type_digits-default">{order.number}</li>
+                                        return <li className="mb-2 text text_type_digits-default"
+                                                   key={"done_" + order.number}>{order.number}</li>
                                     })
                                 }
                             </ul>
@@ -60,7 +61,8 @@ const Feed: FC = () => {
                             <ul className={`${feedStyles.order_statistics_list} ${feedStyles.pending} list-unstyled `}>
                                 {
                                     ordersInProgress.map(order => {
-                                        return <li className="mb-2 text text_type_digits-default">{order.number}</li>
+                                        return <li
+                                            className="mb-2 text text_type_digits-default">{"pending_" + order.number}</li>
                                     })
                                 }
                             </ul>

@@ -2,8 +2,7 @@ import React from "react";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import ingredientDetailsStyles from "./ingredient-details.module.css"
 import {useLocation, useParams} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {AppRootState} from "../../store";
+import { useAppSelector } from "../../types/hooks";
 
 export default function IngredientDetails() {
     const location = useLocation()
@@ -11,7 +10,7 @@ export default function IngredientDetails() {
 
     const { id } = useParams<string>()
 
-    const ingredientsState: IBurgerItem[] = useSelector((state: AppRootState) => state.ingredients.items)
+    const ingredientsState = useAppSelector(state => state.ingredients.items)
 
     const ingredient = ingredientsState.find((item: IBurgerItem) => item._id === id)
 
