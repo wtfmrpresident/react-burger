@@ -17,8 +17,7 @@ export function ProfileOrdersPage() {
             const token = getCookie('token')
             if (token) {
                 dispatch(orderSocketSlice.actions.wsInit({
-                    wsUrl,
-                    token
+                    wsUrl: `${wsUrl}?token=${token}`
                 }))
             }
             return () => {
@@ -41,7 +40,7 @@ export function ProfileOrdersPage() {
     return (
         <>
             {orders.map((orderItem: TWsOrder) => {
-                return (<FeedItem key={orderItem._id} order={orderItem} isShowStatusAllowed={true} />)
+                return (<FeedItem key={orderItem._id} order={orderItem} isShowStatusAllowed={true} isAuthenticated={true} />)
             })}
         </>
     )

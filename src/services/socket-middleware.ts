@@ -20,12 +20,7 @@ export const socketMiddleware = (wsSlice: Slice<any, TWsSocketActions>): Middlew
 
             if (type === wsInit.type) {
                 const { payload }: PayloadAction<TWsInitPayload> = action
-                // определим, как подключаться к сокету
-                if (payload.token) {
-                    socket = new WebSocket(`${payload.wsUrl}?token=${payload.token}`)
-                } else {
-                    socket = new WebSocket(payload.wsUrl)
-                }
+                socket = new WebSocket(payload.wsUrl)
             }
             if (socket) {
                 socket.onopen = event => {

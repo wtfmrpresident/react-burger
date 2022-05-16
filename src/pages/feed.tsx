@@ -39,7 +39,7 @@ const Feed: FC = () => {
 
                     <div className="scroll">
                         {orders.map((orderItem: TWsOrder) => {
-                            return (<FeedItem key={orderItem._id} order={orderItem} isShowStatusAllowed={false}/>)
+                            return (<FeedItem key={orderItem._id} order={orderItem} isShowStatusAllowed={false} isAuthenticated={false} />)
                         })}
                     </div>
                 </section>

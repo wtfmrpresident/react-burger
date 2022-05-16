@@ -1,24 +1,29 @@
-import {useAppDispatch, useAppSelector} from "../types/hooks";
-import {FC, useEffect} from "react";
+import React, {useEffect} from "react";
 import orderSocketSlice from "../services/order-socket";
 import {wsUrl} from "../services/api";
+import {useAppDispatch, useAppSelector} from "../types/hooks";
 import FeedDetails from "../components/feed-item/feed-details";
+import { getCookie } from "../utils/cookie";
 
-const FeedDetail: FC = () => {
+export function ProfileOrderDetails() {
     const dispatch = useAppDispatch()
 
     const ordersSocketState = useAppSelector(store => store.orderSocket)
 
     useEffect(
         () => {
-            console.log(ordersSocketState.isWsConnected)
-            if (!ordersSocketState.isWsConnected) {
+            const token = getCookie('token')
+            console.log(token)
+            if (token) {
                 dispatch(orderSocketSlice.actions.wsInit({
-                    wsUrl: wsUrl + '/all'
+                    wsUrl: `${wsUrl}?token=${token}`
                 }))
             }
+            return () => {
+                dispatch(orderSocketSlice.actions.onClose)
+            }
         },
-        [ordersSocketState.isWsConnected]
+        [dispatch, ordersSocketState.isWsConnected]
     )
 
     return (
@@ -27,5 +32,3 @@ const FeedDetail: FC = () => {
         </div>
     )
 }
-
-export default FeedDetail

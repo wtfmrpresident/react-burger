@@ -12,9 +12,10 @@ import feedDetailsStyles from "./feed-details.module.css";
 type TFeedItem = {
     order: TWsOrder;
     isShowStatusAllowed: boolean;
+    isAuthenticated: boolean;
 }
 
-const FeedItem: FC<TFeedItem> = ({order, isShowStatusAllowed}) => {
+const FeedItem: FC<TFeedItem> = ({order, isShowStatusAllowed, isAuthenticated}) => {
     const allIngredients = useAppSelector(state => state.ingredients.items)
 
     const orderIngredients = useMemo(
@@ -53,9 +54,11 @@ const FeedItem: FC<TFeedItem> = ({order, isShowStatusAllowed}) => {
 
     const location = useLocation()
 
+    const linkTo = isAuthenticated ? `/profile/orders/${order._id}` : `/feed/${order._id}`
+
     return (
         <Link
-            to={`/feed/${order._id}`}
+            to={linkTo}
             state={{backgroundLocation: location}}
             className={feedItemStyles.feed_item_link}
         >

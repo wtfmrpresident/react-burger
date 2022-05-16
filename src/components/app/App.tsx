@@ -23,6 +23,7 @@ import Feed from "../../pages/feed";
 import { useAppDispatch, useAppSelector } from "../../types/hooks";
 import FeedDetails from "../feed-item/feed-details";
 import FeedDetail from "../../pages/feed-detail";
+import { ProfileOrderDetails } from "../../pages/profile-order-details";
 
 function App() {
     const dispatch = useAppDispatch()
@@ -71,6 +72,11 @@ function App() {
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/feed" element={<Feed/>}/>
                     <Route path="/feed/:id" element={<FeedDetail/>}/>
+                    <Route path="/profile/orders/:id" element={
+                        <RequireAuth>
+                            <ProfileOrderDetails />
+                        </RequireAuth>
+                    }/>
                     <Route path="/profile/*" element={
                         <RequireAuth>
                             <AccountPage/>
@@ -98,6 +104,13 @@ function App() {
                         <Modal onClose={handleToggleModal}>
                             <FeedDetails/>
                         </Modal>
+                    }/>
+                    <Route path="/profile/orders/:id" element={
+                        <RequireAuth>
+                            <Modal onClose={handleToggleModal}>
+                                <ProfileOrderDetails/>
+                            </Modal>
+                        </RequireAuth>
                     }/>
                 </Routes>
             )}
