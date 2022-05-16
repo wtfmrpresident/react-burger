@@ -2,14 +2,13 @@ import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger
 import loginPageStyles from './login.module.css';
 import {ChangeEvent, SyntheticEvent, useState} from "react";
 import {Link, Navigate, useLocation} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../store";
 import {login} from "../services/account";
 import {ILocationState} from "../interfaces/ILocationState";
+import { useAppDispatch, useAppSelector } from "../types/hooks";
 
 export function LoginPage() {
-    const dispatch = useDispatch()
-    const accountState = useSelector((state: AppRootState) => state.account)
+    const dispatch = useAppDispatch()
+    const accountState = useAppSelector(state => state.account)
 
     const [form, setValue] = useState({ email: '', password: '' })
 

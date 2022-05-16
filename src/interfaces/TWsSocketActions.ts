@@ -26,7 +26,7 @@ export type TWsInitPayload = {
     token?: string;
 }
 
-export type TWsOrderActions = {
+export type TWsSocketActions = {
     wsInit: (state: TWsOrderState, action: PayloadAction<TWsInitPayload>) => void,
     wsSendMessage: (state: TWsOrderState, action: PayloadAction<TWsOrderState>) => void,
     onOpen: (state: TWsOrderState) => void,

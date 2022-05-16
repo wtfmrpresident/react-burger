@@ -6,7 +6,7 @@ import orderSocketSlice from "../services/order-socket";
 import {wsUrl} from "../services/api";
 import {useAppDispatch, useAppSelector} from "../types/hooks";
 import {getCookie} from "../utils/cookie";
-import {TWsOrder} from "../interfaces/TWsOrderActions";
+import {TWsOrder} from "../interfaces/TWsSocketActions";
 import FeedItem from "../components/feed-item/feed-item";
 
 export function ProfileOrdersPage() {

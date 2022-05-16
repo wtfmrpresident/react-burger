@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import feedStyles from "./feed.module.css";
 import orderSocketSlice from "../services/order-socket";
-import { TWsOrder } from "../interfaces/TWsOrderActions";
+import { TWsOrder } from "../interfaces/TWsSocketActions";
 import { useAppDispatch, useAppSelector } from "../types/hooks";
 import FeedItem from "../components/feed-item/feed-item";
 import { wsUrl } from "../services/api";

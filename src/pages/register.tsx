@@ -3,13 +3,12 @@ import registerPageStyles from "./register.module.css";
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {Link} from "react-router-dom";
 import {register} from "../services/account";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../store";
 import {IRegisterData} from "../utils/auth";
+import { useAppDispatch, useAppSelector } from "../types/hooks";
 
 export function RegisterPage() {
-    const dispatch = useDispatch()
-    const accountState = useSelector((state: AppRootState) => state.account)
+    const dispatch = useAppDispatch()
+    const accountState = useAppSelector(state => state.account)
 
     const [form, setValue] = useState<IRegisterData>({ name: '', email: '', password: '' });
 

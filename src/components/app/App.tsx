@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import {
     AccountPage,
@@ -31,6 +31,7 @@ function App() {
     const state = location.state as { backgroundLocation?: Location };
 
     const handleToggleModal = () => {
+
         navigate(-1)
     }
 

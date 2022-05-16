@@ -1,4 +1,4 @@
-import React, {MouseEventHandler, useEffect} from "react";
+import React, { MouseEventHandler, SyntheticEvent, useEffect } from "react";
 import ModalOverlay from "./modal-overlay";
 import {createPortal} from "react-dom";
 import modalStyles from "../modal/modal.module.css";
@@ -20,10 +20,15 @@ const modalRoot = document.getElementById('modal');
 
 const Modal: React.FC<ModalProps> = ({onClose, title, children, isModalVisible}) => {
     useEffect(() => {
-        document.addEventListener<'keydown'>('keydown', onClose, false);
+        const onEscapeKeydown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                onClose()
+            }
+        }
+        document.addEventListener<'keydown'>('keydown', onEscapeKeydown, false);
 
         return () => {
-            document.removeEventListener<'keydown'>('keydown', onClose);
+            document.removeEventListener<'keydown'>('keydown', onEscapeKeydown);
         }
     }, [onClose])
 

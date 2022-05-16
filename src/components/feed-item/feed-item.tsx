@@ -1,5 +1,5 @@
 import React, {FC, useMemo} from "react";
-import { TWsOrder } from "../../interfaces/TWsOrderActions";
+import { TWsOrder } from "../../interfaces/TWsSocketActions";
 import feedItemStyles from "./feed-item.module.css";
 import Moment from "react-moment";
 import {useAppSelector} from "../../types/hooks";

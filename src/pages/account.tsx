@@ -1,15 +1,14 @@
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../store";
 import {Outlet, Link, Navigate, NavLink, useLocation} from "react-router-dom";
 import accountPageStyles from "./account.module.css";
 import React, { SyntheticEvent } from "react";
 import {getCookie} from "../utils/cookie";
 import {ITokenData} from "../utils/auth";
 import {logout} from "../services/account";
+import { useAppDispatch, useAppSelector } from "../types/hooks";
 
 export function AccountPage() {
-    const dispatch = useDispatch()
-    const accountState = useSelector((state: AppRootState) => state.account)
+    const dispatch = useAppDispatch()
+    const accountState = useAppSelector(state => state.account)
 
     const location = useLocation()
 
