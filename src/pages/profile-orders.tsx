@@ -1,6 +1,4 @@
 import React, {useEffect} from "react";
-import { useSelector } from "react-redux";
-import { AppRootState } from "../store";
 import { Navigate } from "react-router-dom";
 import orderSocketSlice from "../services/order-socket";
 import {wsUrl} from "../services/api";
@@ -11,7 +9,7 @@ import FeedItem from "../components/feed-item/feed-item";
 
 export function ProfileOrdersPage() {
     const dispatch = useAppDispatch()
-    const accountState = useSelector((state: AppRootState) => state.account)
+    const accountState = useAppSelector(state => state.account)
     const ordersSocketState = useAppSelector(store => store.orderSocket)
 
     useEffect(

@@ -3,7 +3,6 @@ import BurgerConstructorItem from "./burger-constructor-item";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import { BurgerConstructorTotal } from "./burger-constructor-total";
-import { AppRootState } from "../../store";
 import { useDrop } from "react-dnd";
 import { addToCart } from "../../services/cart";
 import { useAppDispatch, useAppSelector } from "../../types/hooks";
@@ -11,8 +10,8 @@ import { useAppDispatch, useAppSelector } from "../../types/hooks";
 function BurgerConstructor() {
     const dispatch = useAppDispatch()
 
-    const bunItemsState: IBurgerItem[] = useAppSelector((state: AppRootState) => state.cart.bunItems)
-    const ingredientItemsState: IBurgerItem[] = useAppSelector((state: AppRootState) => state.cart.ingredientItems)
+    const bunItemsState: IBurgerItem[] = useAppSelector(state => state.cart.bunItems)
+    const ingredientItemsState: IBurgerItem[] = useAppSelector(state => state.cart.ingredientItems)
 
     const bunTop = bunItemsState ? bunItemsState.find((cartItem) => cartItem.subtype === 'top') : null
     const bunBottom = bunItemsState ? bunItemsState.find((cartItem) => cartItem.subtype === 'bottom') : null
