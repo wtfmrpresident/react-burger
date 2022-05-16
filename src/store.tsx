@@ -7,7 +7,7 @@ import orderSocketSlice  from "./services/order-socket";
 export const store = configureStore({
     reducer: rootReducer,
     middleware: getDefaultMiddleware => {
-        return getDefaultMiddleware().concat(thunk, socketMiddleware(orderSocketSlice.actions));
+        return getDefaultMiddleware().concat(thunk, socketMiddleware(orderSocketSlice));
     },
     devTools: process.env.NODE_ENV !== 'production',
 })

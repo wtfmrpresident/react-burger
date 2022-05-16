@@ -2,9 +2,9 @@ import { Middleware, MiddlewareAPI } from "redux";
 import { AppDispatch, AppRootState } from "../store";
 import { TWsInitPayload, TWsOrderState, TWsSocketActions } from "../interfaces/TWsSocketActions";
 import orderSocketSlice from "./order-socket";
-import { CaseReducerActions, PayloadAction } from "@reduxjs/toolkit";
+import { PayloadAction, Slice } from "@reduxjs/toolkit";
 
-export const socketMiddleware = (wsActions: CaseReducerActions<TWsSocketActions>): Middleware => {
+export const socketMiddleware = (wsSlice: Slice<any, TWsSocketActions>): Middleware => {
     return ((store: MiddlewareAPI<AppDispatch, AppRootState>) => {
         let socket: WebSocket | null = null
 
@@ -12,12 +12,11 @@ export const socketMiddleware = (wsActions: CaseReducerActions<TWsSocketActions>
             const { dispatch } = store;
             const { type } = action;
 
-            console.log(wsActions)
             const {
                 wsInit,
                 wsSendMessage,
                 onClose,
-            } = wsActions;
+            } = wsSlice.actions;
 
             if (type === wsInit.type) {
                 const { payload }: PayloadAction<TWsInitPayload> = action
