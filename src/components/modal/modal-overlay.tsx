@@ -1,5 +1,5 @@
 import modalOverlayStyles from "./modal-overlay.module.css"
-import React, { FC, SyntheticEvent, useEffect, useRef } from "react";
+import React, { FC, SyntheticEvent, useRef } from "react";
 
 interface IModalOverlay {
     onBackdropClick: () => void
