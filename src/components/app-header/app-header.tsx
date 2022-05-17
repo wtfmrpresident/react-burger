@@ -14,7 +14,7 @@ function AppHeader() {
         {
             text: 'Лента заказов',
             icon: <ListIcon type="secondary" />,
-            link: '/orders'
+            link: '/feed'
         },
     ];
 

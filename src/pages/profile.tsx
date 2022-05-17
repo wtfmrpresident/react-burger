@@ -1,19 +1,18 @@
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import React, {ChangeEvent, SyntheticEvent, useRef, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../store";
 import {IRegisterData} from "../utils/auth";
 import {profileUpdate} from "../services/account";
+import { useAppDispatch, useAppSelector } from "../types/hooks";
 
 export function ProfilePage() {
-    const dispatch = useDispatch()
-    const accountState = useSelector((state: AppRootState) => state.account)
+    const dispatch = useAppDispatch()
+    const accountState = useAppSelector(state => state.account)
 
     const [isDataChanged, setIsDataChanged] = useState<boolean>(false)
 
-    const inputNameRef = useRef<HTMLInputElement>(null)
-    const inputEmailRef = useRef<HTMLInputElement>(null)
-    const inputPasswordRef = useRef<HTMLInputElement>(null)
+    const inputNameRef = useRef<HTMLInputElement | null>(null)
+    const inputEmailRef = useRef<HTMLInputElement | null>(null)
+    const inputPasswordRef = useRef<HTMLInputElement | null>(null)
 
     const [form, setValue] = useState<IRegisterData>({ name: accountState.user?.name || '', email: accountState.user?.email || '', password: '' });
 

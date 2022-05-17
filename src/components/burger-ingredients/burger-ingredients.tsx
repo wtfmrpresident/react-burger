@@ -3,10 +3,8 @@ import Tabs from "./tabs";
 import IngredientsList from "./ingredients-list";
 import IBurgerItem from "../../interfaces/IBurgerItem";
 import ITitles from "../../interfaces/ITitles";
-import ingredientsStyle from "./ingredients-list.module.css";
-import {useSelector} from "react-redux";
-import {AppRootState} from "../../store";
 import {InView} from "react-intersection-observer";
+import { useAppSelector } from "../../types/hooks";
 
 type TBurgerIngredientsPositionState = {
     type: string;
@@ -19,7 +17,7 @@ export type TSetSelectedTab = {
 }
 
 const BurgerIngredients: FC = () => {
-    const ingredientItems = useSelector((state: AppRootState) => state.ingredients.items)
+    const ingredientItems = useAppSelector(state => state.ingredients.items)
 
     const containerRef = React.useRef<HTMLDivElement | null>(null)
     const bunRef = React.useRef<HTMLHeadingElement | null>(null)
@@ -89,7 +87,7 @@ const BurgerIngredients: FC = () => {
             <h1 className="mt-10 mb-5 text text_type_main-large">Соберите Бургер</h1>
             <Tabs selectedTab={selectedTab} setSelectedTab={handleChangeTab} />
 
-            <div ref={containerRef} className={`${ingredientsStyle.scroll} pr-4`}>
+            <div ref={containerRef} className={`scroll pr-4`}>
                 {Object.entries(titles()).map((title: [string, string]) => {
                     const type = title[0]
                     const items = ingredientItems ? ingredientItems.filter((item: IBurgerItem) => item.type === type) : []

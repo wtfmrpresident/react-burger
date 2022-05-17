@@ -10,12 +10,6 @@ import authService, {
 } from "../utils/auth";
 import {setCookie} from "../utils/cookie";
 
-type TRejectedAction = {
-    error: {
-        message: string
-    }
-}
-
 type TAccountState = {
     user: IUser | null;
 
@@ -41,11 +35,7 @@ type TAccountState = {
 
 export const register = createAsyncThunk<
     void | ILoginAndRegisterResponse,
-    IRegisterData,
-    {
-        state: TAccountState;
-        rejectValue: TRejectedAction;
-    }
+    IRegisterData
     >(
     'auth/register',
     async (data: IRegisterData): Promise<void | ILoginAndRegisterResponse> => {
@@ -55,10 +45,7 @@ export const register = createAsyncThunk<
 
 export const login = createAsyncThunk<
     void | ILoginAndRegisterResponse,
-    ILoginData,
-    {
-        state: TAccountState;
-    }
+    ILoginData
     >(
     'auth/login',
     async (data: ILoginData): Promise<void | ILoginAndRegisterResponse> => {
@@ -68,10 +55,7 @@ export const login = createAsyncThunk<
 
 export const logout = createAsyncThunk<
     void | ILogoutResponse,
-    ITokenData,
-    {
-        state: TAccountState;
-    }
+    ITokenData
     >(
     'auth/logout',
     async (data: ITokenData): Promise<void | ILogoutResponse> => {
@@ -100,10 +84,7 @@ export const profile = createAsyncThunk<
 
 export const profileUpdate = createAsyncThunk<
     void | IProfileResponse,
-    IRegisterData,
-    {
-        state: TAccountState;
-    }
+    IRegisterData
     >(
     'auth/profileUpdate',
     async (data: IRegisterData): Promise<void | IProfileResponse> => {

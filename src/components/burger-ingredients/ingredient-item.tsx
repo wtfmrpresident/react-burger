@@ -2,10 +2,9 @@ import React, { FC } from "react";
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientItemStyle from './ingredient-item.module.css';
 import IBurgerItem from "../../interfaces/IBurgerItem";
-import {useSelector} from "react-redux";
-import {AppRootState} from "../../store";
 import {useDrag} from "react-dnd";
 import {Link, useLocation} from "react-router-dom";
+import { useAppSelector } from "../../types/hooks";
 
 type TIngredientItemProps = {
     item: IBurgerItem;
@@ -19,8 +18,8 @@ type TDragCollectedProps = {
 const IngredientItem: FC<TIngredientItemProps> = ({ item }) => {
     const location = useLocation()
 
-    const bunItemsState = useSelector<AppRootState, IBurgerItem[]>((store) => store.cart.bunItems)
-    const ingredientItemsState = useSelector<AppRootState, IBurgerItem[]>((store) => store.cart.ingredientItems)
+    const bunItemsState = useAppSelector(store => store.cart.bunItems)
+    const ingredientItemsState = useAppSelector(store => store.cart.ingredientItems)
 
     function getCartItemQuantity(item: IBurgerItem): number {
         const cart = item.type === 'bun' ? bunItemsState : ingredientItemsState

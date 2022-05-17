@@ -1,4 +1,4 @@
-import React, {MouseEventHandler, useEffect} from "react";
+import React, { MouseEventHandler, useEffect } from "react";
 import ModalOverlay from "./modal-overlay";
 import {createPortal} from "react-dom";
 import modalStyles from "../modal/modal.module.css";
@@ -20,10 +20,15 @@ const modalRoot = document.getElementById('modal');
 
 const Modal: React.FC<ModalProps> = ({onClose, title, children, isModalVisible}) => {
     useEffect(() => {
-        document.addEventListener<'keydown'>('keydown', onClose, false);
+        const onEscapeKeydown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                onClose()
+            }
+        }
+        document.addEventListener<'keydown'>('keydown', onEscapeKeydown, false);
 
         return () => {
-            document.removeEventListener<'keydown'>('keydown', onClose);
+            document.removeEventListener<'keydown'>('keydown', onEscapeKeydown);
         }
     }, [onClose])
 
@@ -37,14 +42,14 @@ const Modal: React.FC<ModalProps> = ({onClose, title, children, isModalVisible})
             <div onClick={stopPropagation}>
                 <div className={modalStyles.modal}>
                     <div className={`${modalStyles.header} mt-10 ml-10 mr-10`}>
-                        <div className={`${modalStyles.title} text text_type_main-large`}>
+                        <div className="text text_type_main-large">
                             {title && title}
                         </div>
                         <div className={modalStyles.close}>
                             <CloseIcon type="primary" onClick={onClose} />
                         </div>
                     </div>
-                    <div className={`${modalStyles.content_container}`}>
+                    <div className="content_container">
                         <div className={`${modalStyles.content}`}>
                             {children}
                         </div>
