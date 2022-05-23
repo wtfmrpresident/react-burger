@@ -15,7 +15,7 @@ interface IMoveIngredientAction {
     hoverIndex: number
 }
 
-const initialState: ICartItemsState = {
+export const initialState: ICartItemsState = {
     bunItems: [],
     ingredientItems: [],
 }
@@ -40,8 +40,16 @@ function replacedBun(cartItems: IBurgerItem[], item: IBurgerItem): IBurgerItem[]
         }
     }
 
-    const bunTop: IBurgerItem = {...item, name: item.name + ' (верх)', subtype: 'top', uuid: uuidv4()}
-    const bunBottom: IBurgerItem = {...item, name: item.name + ' (низ)', subtype: 'bottom', uuid: uuidv4()}
+    let bunTop: IBurgerItem = {...item, name: item.name + ' (верх)', subtype: 'top'}
+    let bunBottom: IBurgerItem = {...item, name: item.name + ' (низ)', subtype: 'bottom'}
+
+    if (!bunTop.uuid) {
+        bunTop.uuid = uuidv4()
+    }
+
+    if (!bunBottom.uuid) {
+        bunBottom.uuid = uuidv4()
+    }
 
     cart.push(bunTop)
     cart.push(bunBottom)
@@ -61,7 +69,11 @@ export const cartSlice: Slice<ICartItemsState> = createSlice({
                     return
                 }
 
-                state.ingredientItems.push({...ingredient, uuid: uuidv4()})
+                if (!ingredient.uuid) {
+                    ingredient.uuid = uuidv4()
+                }
+
+                state.ingredientItems.push({...ingredient})
             }
         },
 
@@ -95,5 +107,6 @@ export const cartSlice: Slice<ICartItemsState> = createSlice({
 })
 
 export const {addToCart, removeFromCart, moveIngredient, resetCart} = cartSlice.actions
+export const reducer = cartSlice.reducer
 
 export default cartSlice

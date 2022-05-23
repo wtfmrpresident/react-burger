@@ -92,7 +92,7 @@ export const profileUpdate = createAsyncThunk<
     }
 )
 
-const initialState: TAccountState = {
+export const initialState: TAccountState = {
     user: null,
     registerRequest: false,
     registerFailed: false,
@@ -231,6 +231,7 @@ const authSlice: Slice<TAccountState, TAccountActions> = createSlice({
             .addCase(register.fulfilled, (state, action) => {
                 if (action.payload && action.payload.accessToken) {
                     setCookie('token', action.payload.accessToken, {path: '/'})
+                    state.user = action.payload.user
                 }
                 authSlice.caseReducers.registerSuccess(state)
             })
@@ -322,5 +323,7 @@ const authSlice: Slice<TAccountState, TAccountActions> = createSlice({
             })
     }
 })
+
+export const reducer = authSlice.reducer
 
 export default authSlice

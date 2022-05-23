@@ -28,7 +28,7 @@ export const resetPassword = createAsyncThunk(
     }
 )
 
-const initialState: IResetPasswordState = {
+export const initialState: IResetPasswordState = {
     forgotPasswordRequest: false,
     forgotPasswordFailed: false,
     forgotPasswordEmailRequest: null,
@@ -81,5 +81,6 @@ const resetPasswordSlice: Slice<IResetPasswordState, TResetPasswordActions> = cr
 })
 
 export const { setPasswordEmailRequest } = resetPasswordSlice.actions
+export const reducer = resetPasswordSlice.reducer
 
 export default resetPasswordSlice

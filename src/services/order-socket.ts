@@ -1,7 +1,7 @@
 import { createSlice, Slice } from "@reduxjs/toolkit";
 import { TWsSocketActions, TWsOrderState } from "../interfaces/TWsSocketActions";
 
-const initialState: TWsOrderState = {
+export const initialState: TWsOrderState = {
     isWsConnected: false,
 
     orders: [],
@@ -33,5 +33,8 @@ const orderSocketSlice: Slice<TWsOrderState, TWsSocketActions> = createSlice({
         }
     }
 })
+
+export const {onOpen, onClose, onError, onMessage} = orderSocketSlice.actions
+export const reducer = orderSocketSlice.reducer
 
 export default orderSocketSlice

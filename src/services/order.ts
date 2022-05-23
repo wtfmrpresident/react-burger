@@ -7,7 +7,7 @@ type TOrderState = {
     failed: boolean,
 }
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
     orderNumber: null,
     request: false,
     failed: false
@@ -67,5 +67,6 @@ export const orderSlice: Slice<TOrderState, TOrderActions> = createSlice({
 })
 
 export const { resetOrderNumber } = orderSlice.actions
+export const reducer = orderSlice.reducer
 
 export default orderSlice
