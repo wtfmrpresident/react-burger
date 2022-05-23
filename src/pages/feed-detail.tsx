@@ -18,7 +18,7 @@ const FeedDetail: FC = () => {
                 }))
             }
         },
-        [ordersSocketState.isWsConnected]
+        [dispatch, ordersSocketState.isWsConnected]
     )
 
     return (

@@ -8,7 +8,7 @@ export interface IIngredientItemsState {
     failed: boolean,
 }
 
-const initialState: IIngredientItemsState = {
+export const initialState: IIngredientItemsState = {
     items: [],
     request: false,
     failed: false,
@@ -66,5 +66,7 @@ export const ingredientItemsSlice: Slice<IIngredientItemsState, TIngredientItems
             })
     }
 })
+
+export const reducer = ingredientItemsSlice.reducer
 
 export default ingredientItemsSlice
